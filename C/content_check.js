@@ -1,0 +1,6 @@
+const fs=require('fs'), vm=require('vm'), assert=require('assert');
+const context={window:{},console,localStorage:{getItem:()=>null,setItem:()=>{}},document:{},location:{hash:''},URLSearchParams};
+vm.createContext(context);vm.runInContext(fs.readFileSync(__dirname+'/c_lessons.js','utf8'),context);
+const lessons=context.window.cLessons;assert(lessons.length>=30,'Need at least 30 lessons');assert.equal(new Set(lessons.map(x=>x.id)).size,lessons.length,'Duplicate lesson IDs');assert.equal(new Set(lessons.map(x=>x.slug)).size,lessons.length,'Duplicate slugs');
+for(const l of lessons){for(const k of ['id','slug','title','chapter','concept','syntax','examples','commonMistakes','keyTakeaways','quiz'])assert(l[k],`${l.id} missing ${k}`);assert(l.concept.content.length>40,`${l.id} concept too short`);assert(l.examples.length>0,`${l.id} no example`);for(const q of l.quiz)assert(q.answer>=0&&q.answer<q.options.length,`${l.id} invalid quiz answer`);for(const p of l.prerequisites)assert(lessons.some(x=>x.id===p),`${l.id} missing prerequisite ${p}`)}
+console.log(JSON.stringify({chapters:new Set(lessons.map(x=>x.chapter)).size,lessons:lessons.length,concepts:lessons.filter(x=>x.concept?.content).length,examples:lessons.reduce((n,x)=>n+x.examples.length,0),quizzes:lessons.reduce((n,x)=>n+x.quiz.length,0)}));

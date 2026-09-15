@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>C/C++ Learning · Học lập trình từ số 0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --cyan: #0e7490;
+        --cyan-dark: #155e75;
+        --ink: #1e293b;
+        --muted: #64748b;
+        --border: #e2e8f0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f8fafc;
+        color: var(--ink);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      a {
+        text-decoration: none;
+      }
+      .hero {
+        background: linear-gradient(135deg, #0e7490, #155e75);
+        border-radius: 18px;
+        color: white;
+        padding: clamp(2rem, 6vw, 5rem);
+      }
+      .hero h1 {
+        font-size: clamp(2.3rem, 6vw, 4.8rem);
+        line-height: 1.05;
+        margin: 0.6rem 0 1rem;
+      }
+      .hero p {
+        max-width: 680px;
+        color: #cffafe;
+        font-size: 1.1rem;
+        line-height: 1.7;
+      }
+      .course-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+      }
+      .card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px #0f172a0a;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 26px #0f172a14;
+      }
+      .course-icon {
+        width: 3.25rem;
+        height: 3.25rem;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 1.45rem;
+      }
+      .c-icon {
+        background: #dcfce7;
+        color: #15803d;
+      }
+      .cpp-icon {
+        background: #cffafe;
+        color: #0e7490;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 8px;
+        padding: 0.7rem 1rem;
+        font-weight: 700;
+      }
+      .btn-primary {
+        background: var(--cyan);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--cyan-dark);
+      }
+      .btn-light {
+        background: #ecfeff;
+        color: #155e75;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .stat strong {
+        display: block;
+        color: var(--cyan);
+        font-size: 1.65rem;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .progress {
+        height: 7px;
+        background: #e2e8f0;
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .progress div {
+        height: 100%;
+        background: #0891b2;
+        border-radius: 99px;
+      }
+      @media (max-width: 700px) {
+        .course-grid,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .hero {
+          padding: 2rem 1.35rem;
+        }
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bg-cyan-700 text-white px-5 py-4">
+      <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+        <a href="index.html" class="text-white font-bold text-lg"
+          ><i class="fas fa-code mr-2"></i>C/C++ Learning</a
+        ><a href="#" class="text-cyan-100 text-sm hover:text-white"
+          >Design by Lương Nguyễn</a
+        >
+      </div>
+    </header>
+    <main class="max-w-6xl mx-auto px-5 py-8">
+      <section class="hero">
+        <span class="font-bold tracking-widest text-cyan-200"
+          >PROGRAMMING FROM ZERO</span
+        >
+        <h1>Học C và C++<br />từng bước rõ ràng.</h1>
+        <p>
+          Hai lộ trình thực hành dành cho người mới: bắt đầu từ câu lệnh đầu
+          tiên, đi qua biến, điều kiện, vòng lặp, hàm, cấu trúc dữ liệu và
+          project.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a class="btn btn-light" href="/C/C.html"
+            >Bắt đầu với C <i class="fas fa-arrow-right"></i></a
+          ><a
+            class="btn btn-primary bg-white text-cyan-800"
+            href="/CPP/CPP.html"
+            >Bắt đầu với C++ <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </section>
+      <section class="course-grid mt-6">
+        <article class="card">
+          <div class="course-icon c-icon"><i class="fas fa-terminal"></i></div>
+          <h2 class="text-2xl font-bold mt-4">C Programming</h2>
+          <p class="text-slate-500 leading-7">
+            Nền tảng lập trình, bộ nhớ, biến, toán tử, điều kiện, vòng lặp,
+            mảng, hàm, con trỏ, struct và file.
+          </p>
+          <div class="flex justify-between text-sm text-slate-500 mt-5">
+            <span><i class="fas fa-book mr-1"></i> Khóa học C</span
+            ><span id="c-progress-label">Bắt đầu</span>
+          </div>
+          <div class="progress mt-2">
+            <div id="c-progress-bar" style="width: 0"></div>
+          </div>
+          <a class="btn btn-primary mt-5" href="/C/C.html">Học C</a>
+        </article>
+        <article class="card">
+          <div class="course-icon cpp-icon"><i class="fas fa-cubes"></i></div>
+          <h2 class="text-2xl font-bold mt-4">C++ Programming</h2>
+          <p class="text-slate-500 leading-7">
+            C++ hiện đại với iostream, string, vector, class, OOP, STL, RAII,
+            smart pointer và file I/O.
+          </p>
+          <div class="flex justify-between text-sm text-slate-500 mt-5">
+            <span><i class="fas fa-book mr-1"></i> Khóa học C++</span
+            ><span id="cpp-progress-label">Bắt đầu</span>
+          </div>
+          <div class="progress mt-2">
+            <div id="cpp-progress-bar" style="width: 0"></div>
+          </div>
+          <a class="btn btn-primary mt-5" href="/CPP/CPP.html">Học C++</a>
+        </article>
+      </section>
+      <section class="stats mt-6">
+        <div class="card stat"><strong>94+</strong><span>Bài học C</span></div>
+        <div class="card stat"><strong>31</strong><span>Bài học C++</span></div>
+        <div class="card stat">
+          <strong>35+</strong><span>Bài tập thực hành</span>
+        </div>
+      </section>
+      <section class="card mt-6">
+        <h2 class="text-2xl font-bold">Cách học hiệu quả</h2>
+        <div class="grid md:grid-cols-3 gap-5 mt-5">
+          <div>
+            <i class="fas fa-book-open text-cyan-600 text-xl"></i>
+            <h3 class="font-bold mt-2">Đọc khái niệm</h3>
+            <p class="text-sm text-slate-500">
+              Hiểu vì sao cú pháp hoạt động trước khi ghi nhớ code.
+            </p>
+          </div>
+          <div>
+            <i class="fas fa-keyboard text-cyan-600 text-xl"></i>
+            <h3 class="font-bold mt-2">Tự gõ và chạy</h3>
+            <p class="text-sm text-slate-500">
+              Thay đổi ví dụ, đọc lỗi compiler, sửa từng bước.
+            </p>
+          </div>
+          <div>
+            <i class="fas fa-trophy text-cyan-600 text-xl"></i>
+            <h3 class="font-bold mt-2">Làm bài tập</h3>
+            <p class="text-sm text-slate-500">
+              Củng cố kiến thức bằng test cases và project nhỏ.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="text-center text-sm text-slate-500 px-5 py-8">
+      © 2026 C/C++ Learning · Nội dung tham khảo cấu trúc tutorial công khai;
+      diễn giải và ví dụ được viết riêng - Copyright by Lương Nguyễn.
+    </footer>
+    <script>
+      function showProgress(key, label, bar, total) {
+        try {
+          const data = JSON.parse(localStorage.getItem(key) || "{}");
+          const done = data.lessons
+            ? Object.values(data.lessons).filter((x) => x.completed).length
+            : 0;
+          document.getElementById(label).textContent = done
+            ? done + "/" + total + " bài"
+            : "Bắt đầu";
+          document.getElementById(bar).style.width =
+            Math.min(100, (done / total) * 100) + "%";
+        } catch (e) {}
+      }
+      showProgress(
+        "c-learning-progress-v1",
+        "c-progress-label",
+        "c-progress-bar",
+        94,
+      );
+      showProgress(
+        "cpp-learning-progress-v1",
+        "cpp-progress-label",
+        "cpp-progress-bar",
+        31,
+      );
+    </script>
+  </body>
+</html>
