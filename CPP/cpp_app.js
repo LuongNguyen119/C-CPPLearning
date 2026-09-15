@@ -238,7 +238,7 @@
       const rows = [];
       for (const t of x.testCases) {
         try {
-          const r = await fetch("/api/run", {
+          const r = await fetch("http://127.0.0.1:8766/api/run", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -280,7 +280,7 @@
     node.classList.remove("hidden");
     node.textContent = "Đang biên dịch và chạy...";
     try {
-      const r = await fetch("/api/run", {
+      const r = await fetch("http://127.0.0.1:8766/api/run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
