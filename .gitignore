@@ -1,0 +1,8 @@
+# Maven target directories (chỉ từ plugin_dev)
+plugin_dev/**/target/
+
+# World directories - không push các world
+
+**/.zcode/**
+**/w3schools_cpp_tutorial_vi.md
+**/w3schools_cpp_tutorial.md

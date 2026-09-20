@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parent
 
 class Handler(SimpleHTTPRequestHandler):
     def end_headers(self):
-        self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1:8766")
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS, GET")
         super().end_headers()

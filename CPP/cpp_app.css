@@ -1,6 +1,39 @@
 * {
   box-sizing: border-box;
 }
+.exercise-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.exercise-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  border: 1px solid #bae6fd;
+  background: #ecfeff;
+  color: #155e75;
+  border-radius: 8px;
+  padding: 9px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    background 0.15s;
+}
+.exercise-chip:hover {
+  background: #cffafe;
+  transform: translateY(-1px);
+}
+.exercise-chip .chip-main {
+  font-weight: 700;
+}
+.exercise-chip .chip-meta {
+  font-size: 0.72rem;
+  color: #0e7490;
+}
 body {
   margin: 0;
   font-family:
@@ -55,7 +88,7 @@ textarea {
 }
 .hero {
   border-radius: 16px;
-  background: #0e7490;
+  background: linear-gradient(135deg, #0e7490 0%, #0369a1 60%, #155e75 100%);
   color: #fff;
   padding: 42px;
 }
@@ -63,15 +96,63 @@ textarea {
   color: #a5f3fc;
   font-weight: 700;
   letter-spacing: 0.08em;
+  font-size: 0.8rem;
 }
 .hero h2 {
   font-size: clamp(2.2rem, 5vw, 4rem);
   margin: 12px 0;
 }
 .hero p {
-  max-width: 700px;
+  max-width: 760px;
   font-size: 1.1rem;
   line-height: 1.7;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+.primary-btn.large {
+  padding: 12px 22px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.secondary-btn.light {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+.secondary-btn.light:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.chapters-title {
+  margin: 30px 0 6px;
+  color: #0e7490;
+  font-size: 1.2rem;
+}
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.chapter-card {
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+.chapter-card:hover {
+  transform: translateY(-2px);
+  border-color: #67e8f9;
+  box-shadow: 0 8px 22px rgba(14, 116, 144, 0.14);
+}
+.chapter-card .chapter-name {
+  font-weight: 700;
+  color: #155e75;
+}
+.chapter-card p {
+  margin: 10px 0;
+  min-height: 40px;
 }
 .feature-grid,
 .exercise-grid {
@@ -376,6 +457,177 @@ textarea {
 .hidden {
   display: none !important;
 }
+/* --- redesigned course views --- */
+.chapter-label {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ch-caret {
+  display: inline-block;
+  transition: transform 0.15s;
+  font-size: 10px;
+  color: #0e7490;
+}
+.ch-caret.closed {
+  transform: rotate(-90deg);
+}
+.ch-count {
+  margin-left: auto;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.ch-count.all-done {
+  color: #059669;
+}
+.lesson-num {
+  color: #94a3b8;
+  font-size: 0.7rem;
+  width: 22px;
+  flex: none;
+  text-align: right;
+}
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.title-en {
+  font-style: italic;
+  color: #64748b !important;
+  margin-top: -4px !important;
+}
+.badge.link {
+  background: #cffafe;
+  color: #155e75;
+  text-decoration: none;
+  font-weight: 700;
+}
+.badge.link:hover {
+  background: #a5f3fc;
+}
+.section-outline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 4px;
+}
+.section-outline li {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  color: #475569;
+}
+h4.sub {
+  margin: 16px 0 4px;
+  color: #0e7490;
+  font-size: 0.9rem;
+}
+.example-card {
+  padding: 14px 16px;
+  margin: 14px 0;
+  border-radius: 10px;
+}
+.example-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.example-head h4 {
+  margin: 4px 0;
+  color: #155e75;
+}
+.ex-num {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  flex: none;
+}
+.example-card pre {
+  border-radius: 8px;
+  margin: 10px 0;
+}
+.ex-explain {
+  font-size: 0.92rem;
+  margin: 6px 0 0;
+}
+.example-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.primary-btn.small,
+.secondary-btn.small {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+}
+.run-btn {
+  background: #059669;
+}
+.run-btn:hover {
+  background: #047857;
+}
+.table-block {
+  margin: 16px 0;
+}
+.table-title {
+  margin: 0 0 6px;
+  color: #155e75;
+}
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85rem;
+}
+.data-table th {
+  background: #ecfeff;
+  color: #155e75;
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 2px solid #bae6fd;
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: top;
+}
+.data-table tbody tr:hover {
+  background: #f8fafc;
+}
+.tips {
+  margin: 10px 0 0;
+  display: grid;
+  gap: 6px;
+}
+.tip {
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  margin: 0;
+  line-height: 1.55;
+  color: #713f12;
+}
+.feature-grid .surface h3 {
+  margin-top: 0;
+  font-size: 1.02rem;
+}
 body.dark {
   background: #0f172a !important;
   color: #e2e8f0;
@@ -411,6 +663,44 @@ body.dark .nav-link.active {
   background: #164e63;
   color: #cffafe;
   border-color: #22d3ee;
+}
+body.dark .lesson-content p,
+body.dark .lesson-content li {
+  color: #cbd5e1;
+}
+body.dark .section-outline li {
+  background: #334155;
+  border-color: #475569;
+  color: #cbd5e1;
+}
+body.dark .data-table th {
+  background: #164e63;
+  color: #cffafe;
+  border-color: #155e75;
+}
+body.dark .data-table td {
+  border-color: #334155;
+}
+body.dark .data-table tbody tr:hover {
+  background: #17364a;
+}
+body.dark .table-wrap {
+  border-color: #334e63;
+}
+body.dark .tip {
+  background: #422006;
+  border-color: #92400e;
+  color: #fde68a;
+}
+body.dark .chapter-card .chapter-name,
+body.dark .title-en {
+  color: #a5f3fc;
+}
+body.dark .chapter-label {
+  color: #94a3b8;
+}
+body.dark .run-btn {
+  background: #047857;
 }
 @media (max-width: 900px) {
   .exercise-grid {
