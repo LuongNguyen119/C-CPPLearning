@@ -20,7 +20,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "C++ là ngôn ngữ đa nền tảng, dùng để tạo các ứng dụng hiệu năng cao. C++ được Bjarne Stroustrup phát triển, như phần mở rộng của C. C++ cho lập trình viên khả năng kiểm soát cao tài nguyên hệ thống và bộ nhớ. C++ đã tiến hóa qua nhiều năm, với các phiên bản chính gồm C++11, C++14, C++17, C++20, C++23 và C++26. C++ là một trong những ngôn ngữ lập trình phổ biến nhất thế giới. C++ có mặt trong các hệ điều hành, giao diện đồ họa và hệ thống nhúng hiện nay. C++ là ngôn ngữ lập trình hướng đối tượng mang lại cấu trúc rõ ràng cho các chương trình và cho phép tái sử dụng code, hạ thấp chi phí phát triển. C++ có tính di động, dùng phát triển ứng dụng thích ứng được nhiều nền tảng. C++ thật vui và dễ học! Vì C++ gần gũi với C, C# và Java, lập trình viên dễ chuyển sang C++ hoặc ngược lại. C++ được phát triển như phần mở rộng của C, và hai ngôn ngữ gần như cùng cú pháp. Khác biệt chính giữa C và C++: C++ hỗ trợ lớp và đối tượng, C thì không. Khi hoàn thành hướng dẫn này, bạn sẽ viết được chương trình C++ và tạo các ví dụ thực tế. Bạn không cần có kinh nghiệm lập trình từ trước."
+      "content": "C++ là ngôn ngữ đa nền tảng, dùng để tạo các ứng dụng hiệu năng cao. C++ được Bjarne Stroustrup phát triển, như phần mở rộng của C. C++ cho lập trình viên khả năng kiểm soát cao tài nguyên hệ thống và bộ nhớ. C++ đã tiến hóa qua nhiều năm, với các phiên bản chính gồm C++11, C++14, C++17, C++20, C++23 và C++26.\n\nC++ là một trong những ngôn ngữ lập trình phổ biến nhất thế giới. C++ có mặt trong các hệ điều hành, giao diện đồ họa và hệ thống nhúng hiện nay. C++ là ngôn ngữ lập trình hướng đối tượng mang lại cấu trúc rõ ràng cho các chương trình và cho phép tái sử dụng code, hạ thấp chi phí phát triển. C++ có tính di động, dùng phát triển ứng dụng thích ứng được nhiều nền tảng. C++ thật vui và dễ học! Vì C++ gần gũi với C, C# và Java, lập trình viên dễ chuyển sang C++ hoặc ngược lại.\n\nC++ được phát triển như phần mở rộng của C, và hai ngôn ngữ gần như cùng cú pháp. Khác biệt chính giữa C và C++: C++ hỗ trợ lớp và đối tượng, C thì không.\n\nKhi hoàn thành hướng dẫn này, bạn sẽ viết được chương trình C++ và tạo các ví dụ thực tế. Bạn không cần có kinh nghiệm lập trình từ trước."
     },
     "sections": [
       "C++ là gì?",
@@ -81,7 +81,7 @@
     "prerequisites": [
       "cpp-intro"
     ],
-    "description": "Tại C-CPPLearning, bạn thử C++ mà không cần cài đặt gì.",
+    "description": "Bắt đầu học C++ ngay: viết chương trình đầu tiên và cài môi trường C++ trên máy.",
     "objectives": [
       "Nắm được: Bắt đầu với C++.",
       "Trình bày được: Bắt đầu với C++; Cài đặt C++; Cài đặt C++ iDE.",
@@ -89,7 +89,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Tại C-CPPLearning, bạn thử C++ mà không cần cài đặt gì. Trình soạn thảo C++ trực tuyến chạy ngay trong trình duyệt, hiển thị cả code lẫn kết quả: Trình soạn thảo này sẽ dùng suốt hướng dẫn để minh họa các khía cạnh của C++. Muốn chạy C++ trên máy của bạn, cần hai thứ: Có nhiều trình soạn thảo và trình biên dịch để chọn. Các bước sau sẽ hướng dẫn dùng IDE có sẵn cả hai. IDE (Môi trường phát triển tích hợp) dùng để sửa VÀ biên dịch mã. Những IDE phổ biến gồm Code::Blocks, Eclipse và Visual Studio. Tất cả đều miễn phí, dùng để vừa soạn thảo vừa gỡ lỗi code C++. Lưu ý: IDE trên web cũng dùng được nhưng tính năng hạn chế. Hướng dẫn này dùng Code::Blocks, nơi khởi đầu tốt theo chúng tôi. Bạn có thể tải phiên bản Codeblocks mới nhất tại http://www.codeblocks.org/. Tải tệp mingw-setup.exe để cài trình soạn thảo kèm trình biên dịch. Hãy tạo tệp C++ đầu tiên của bạn. Mở Codeblocks và chọn File > New > Empty File. Viết mã C++ sau và lưu thành myfirstprogram.cpp (File > Save File as): Đừng lo nếu chưa hiểu đoạn mã trên - ta sẽ thảo luận chi tiết ở các chương sau. Hiện tại, hãy tập trung vào cách chạy code. Trong Codeblocks, nó sẽ trông như sau: Sau đó chọn Build > Build and Run để chạy chương trình. Kết quả sẽ trông như thế này: Chúc mừng! Bạn vừa viết và chạy chương trình C++ đầu tiên."
+      "content": "Tại W3Schools, bạn thử C++ mà không cần cài đặt gì. Trình soạn thảo C++ trực tuyến chạy ngay trong trình duyệt, hiển thị cả code lẫn kết quả:\n\nTrình soạn thảo này sẽ dùng suốt hướng dẫn để minh họa các khía cạnh của C++.\n\nMuốn chạy C++ trên máy của bạn, cần hai thứ: Có nhiều trình soạn thảo và trình biên dịch để chọn. Các bước sau sẽ hướng dẫn dùng IDE có sẵn cả hai.\n\nIDE (Môi trường phát triển tích hợp) dùng để sửa VÀ biên dịch mã. Những IDE phổ biến gồm Code::Blocks, Eclipse và Visual Studio. Tất cả đều miễn phí, dùng để vừa soạn thảo vừa gỡ lỗi code C++. Lưu ý: IDE trên web cũng dùng được nhưng tính năng hạn chế. Hướng dẫn này dùng Code::Blocks, nơi khởi đầu tốt theo chúng tôi. Bạn có thể tải phiên bản Codeblocks mới nhất tại http://www.codeblocks.org/. Tải tệp mingw-setup.exe để cài trình soạn thảo kèm trình biên dịch.\n\nHãy tạo tệp C++ đầu tiên của bạn. Mở Codeblocks và chọn File > New > Empty File. Viết mã C++ sau và lưu thành myfirstprogram.cpp (File > Save File as):\n\nĐừng lo nếu chưa hiểu đoạn mã trên - ta sẽ thảo luận chi tiết ở các chương sau. Hiện tại, hãy tập trung vào cách chạy code. Trong Codeblocks, nó sẽ trông như sau: Sau đó chọn Build > Build and Run để chạy chương trình. Kết quả sẽ trông như thế này: Chúc mừng! Bạn vừa viết và chạy chương trình C++ đầu tiên."
     },
     "sections": [
       "Bắt đầu với C++",
@@ -138,7 +138,7 @@
       }
     ],
     "keyTakeaways": [
-      "Tại C-CPPLearning, bạn thử C++ mà không cần cài đặt gì.",
+      "Bắt đầu học C++ ngay: viết chương trình đầu tiên và cài môi trường C++ trên máy.",
       "Trình soạn thảo C++ trực tuyến chạy ngay trong trình duyệt, hiển thị cả code lẫn kết quả:",
       "Trình soạn thảo này sẽ dùng suốt hướng dẫn để minh họa các khía cạnh của C++.",
       "Muốn chạy C++ trên máy của bạn, cần hai thứ:"
@@ -168,7 +168,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Hãy cùng phân tích đoạn mã sau để hiểu rõ hơn: Dòng 1: #include <iostream> là thư viện tệp header cho phép làm việc với đối tượng nhập/xuất như cout (dùng ở dòng 5). Tệp header bổ sung tính năng cho chương trình C++. Dòng 2: using namespace std có nghĩa ta dùng được tên của đối tượng và biến từ thư viện chuẩn. Đừng lo nếu chưa hiểu #include <iostream> và using namespace std hoạt động ra sao. Cứ xem chúng là thứ (gần như) luôn xuất hiện trong chương trình. Dòng 3: một dòng trống. C++ bỏ qua khoảng trắng. Dòng 4: một thứ luôn xuất hiện trong chương trình C++ là int main(). Đó được gọi là một hàm. Dòng 5: cout (đọc là \"see-out\") là đối tượng dùng cùng toán tử chèn (<<) để xuất/in văn bản. Trong ví dụ, nó sẽ in \"Hello World!\". Lưu ý: C++ phân biệt hoa thường: \"cout\" và \"Cout\" khác nhau. Lưu ý: mọi phát biểu C++ kết thúc bằng dấu chấm phẩy ;. Lưu ý: thân của int main() cũng có thể viết là: int main() { cout << \"Hello World!\"; return 0; } Nhớ rằng: trình biên dịch bỏ qua khoảng trắng. Tuy nhiên, chia dòng giúp code dễ đọc hơn. Dòng 6: return 0; kết thúc hàm main. Dòng 7: đừng quên đóng ngoặc nhọn } để kết thúc hàm main. Bạn có thể thấy một số chương trình C++ chạy mà không cần dòng standard namespace. Phát biểu using namespace std; có thể được bỏ, và thay bằng từ khóa std theo sau là toán tử ::, cho một số đối tượng (như std::cout trong ví dụ dưới): Cả hai cách đều hợp lệ trong C++. Dùng std:: cho thấy tên đến từ đâu và tránh xung đột tên trong chương trình lớn. Trong hướng dẫn này, chúng ta chủ yếu dùng using namespace std; Điều này giữ code ngắn và dễ đọc khi học những điều cơ bản về C++. Nó giúp người mới tập trung vào việc hiểu bản thân ngôn ngữ, thay vì liên tục viết std:: trong mọi ví dụ. Khi viết chương trình lớn hoặc phức tạp hơn, bạn có thể muốn dùng std:: tường minh. Bạn sẽ gặp cả hai phong cách trong code C++ thực tế."
+      "content": "Hãy cùng phân tích đoạn mã sau để hiểu rõ hơn:\n\nDòng 1: #include <iostream> là thư viện tệp header cho phép làm việc với đối tượng nhập/xuất như cout (dùng ở dòng 5). Tệp header bổ sung tính năng cho chương trình C++. Dòng 2: using namespace std có nghĩa ta dùng được tên của đối tượng và biến từ thư viện chuẩn. Đừng lo nếu chưa hiểu #include <iostream> và using namespace std hoạt động ra sao. Cứ xem chúng là thứ (gần như) luôn xuất hiện trong chương trình. Dòng 3: một dòng trống. C++ bỏ qua khoảng trắng. Dòng 4: một thứ luôn xuất hiện trong chương trình C++ là int main(). Đó được gọi là một hàm. Dòng 5: cout (đọc là \"see-out\") là đối tượng dùng cùng toán tử chèn (<<) để xuất/in văn bản. Trong ví dụ, nó sẽ in \"Hello World!\". Lưu ý: C++ phân biệt hoa thường: \"cout\" và \"Cout\" khác nhau. Lưu ý: mọi phát biểu C++ kết thúc bằng dấu chấm phẩy ;. Lưu ý: thân của int main() cũng có thể viết là: int main() { cout << \"Hello World!\"; return 0; } Nhớ rằng: trình biên dịch bỏ qua khoảng trắng. Tuy nhiên, chia dòng giúp code dễ đọc hơn. Dòng 6: return 0; kết thúc hàm main. Dòng 7: đừng quên đóng ngoặc nhọn } để kết thúc hàm main.\n\nBạn có thể thấy một số chương trình C++ chạy mà không cần dòng standard namespace. Phát biểu using namespace std; có thể được bỏ, và thay bằng từ khóa std theo sau là toán tử ::, cho một số đối tượng (như std::cout trong ví dụ dưới):\n\nCả hai cách đều hợp lệ trong C++. Dùng std:: cho thấy tên đến từ đâu và tránh xung đột tên trong chương trình lớn.\n\nTrong hướng dẫn này, chúng ta chủ yếu dùng using namespace std; Điều này giữ code ngắn và dễ đọc khi học những điều cơ bản về C++. Nó giúp người mới tập trung vào việc hiểu bản thân ngôn ngữ, thay vì liên tục viết std:: trong mọi ví dụ. Khi viết chương trình lớn hoặc phức tạp hơn, bạn có thể muốn dùng std:: tường minh. Bạn sẽ gặp cả hai phong cách trong code C++ thực tế."
     },
     "sections": [
       "Cú pháp C++",
@@ -250,7 +250,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Chương trình máy tính là danh sách \"chỉ thị\" để máy tính \"thực thi\". Trong ngôn ngữ lập trình, các chỉ thị này được gọi là phát biểu (statement). Phát biểu sau \"chỉ thị\" trình biên dịch in văn bản \"Hello World\" ra màn hình: Điều quan trọng là phải kết thúc phát biểu bằng dấu ; Nếu quên dấu chấm phẩy ( ; ), sẽ phát sinh lỗi và chương trình không chạy: Tự trải nghiệm Hầu hết chương trình C++ chứa nhiều phát biểu. Các phát biểu được thực thi lần theo đúng thứ tự chúng được viết: Từ ví dụ trên, ta có ba phát biểu: Phát biểu đầu chạy trước (in \"Hello World!\" ra màn hình). Sau đó phát biểu thứ hai chạy (in \"Have a good day!\" ra màn hình). Bạn sẽ học thêm về các phát biểu khi đọc hướng dẫn này. Hiện tại, chỉ cần nhớ luôn kết thúc chúng bằng dấu chấm phẩy để tránh mọi lỗi. Sắp tới: chương tiếp theo dạy cách kiểm soát kết quả xuất và chèn dòng mới để dễ đọc hơn."
+      "content": "Chương trình máy tính là danh sách \"chỉ thị\" để máy tính \"thực thi\". Trong ngôn ngữ lập trình, các chỉ thị này được gọi là phát biểu (statement). Phát biểu sau \"chỉ thị\" trình biên dịch in văn bản \"Hello World\" ra màn hình:\n\nĐiều quan trọng là phải kết thúc phát biểu bằng dấu ; Nếu quên dấu chấm phẩy ( ; ), sẽ phát sinh lỗi và chương trình không chạy:\n\nTự trải nghiệm\n\nHầu hết chương trình C++ chứa nhiều phát biểu. Các phát biểu được thực thi lần theo đúng thứ tự chúng được viết:\n\nTừ ví dụ trên, ta có ba phát biểu: Phát biểu đầu chạy trước (in \"Hello World!\" ra màn hình). Sau đó phát biểu thứ hai chạy (in \"Have a good day!\" ra màn hình). Bạn sẽ học thêm về các phát biểu khi đọc hướng dẫn này. Hiện tại, chỉ cần nhớ luôn kết thúc chúng bằng dấu chấm phẩy để tránh mọi lỗi. Sắp tới: chương tiếp theo dạy cách kiểm soát kết quả xuất và chèn dòng mới để dễ đọc hơn."
     },
     "sections": [
       "Câu lệnh C++",
@@ -398,7 +398,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Đối tượng cout cùng toán tử << dùng để xuất giá trị và in văn bản. Chỉ cần nhớ đặt văn bản trong nháy kép ( \"\" ): Bạn có thể thêm bao nhiêu cout cũng được. Tuy nhiên lưu ý nó không tự xuống dòng ở cuối kết quả: Mẹo: cách thêm dòng mới - xem chương C++ New Lines."
+      "content": "Đối tượng cout cùng toán tử << được dùng để in văn bản và xuất giá trị ra màn hình. Chỉ cần nhớ đặt văn bản trong cặp dấu ngoặc kép (\"...\"):\n\nBạn có thể thêm bao nhiêu câu lệnh cout tùy ý, miễn là đặt văn bản trong dấu ngoặc kép. Lưu ý rằng cout không tự xuống dòng ở cuối kết quả.\n\nMẹo: muốn biết cách thêm dòng mới, hãy xem bài \"Ký tự xuống dòng (New Lines / endl)\"."
     },
     "sections": [
       "Đầu ra C++ (In văn bản)",
@@ -475,7 +475,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Bạn cũng có thể dùng cout để in số. Nhưng khác văn bản, số không đặt trong nháy kép: Bạn cũng có thể thực hiện tính toán số học:"
+      "content": "Bạn cũng có thể dùng cout để in số. Tuy nhiên, khác với văn bản, số được viết trực tiếp, không cần dấu ngoặc kép:\n\nBạn còn có thể thực hiện các phép tính số học ngay trong câu lệnh cout, như ví dụ dưới đây:"
     },
     "sections": [
       "Số in C++",
@@ -553,7 +553,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Để chèn dòng mới trong kết quả xuất, dùng ký tự \\n: Bạn cũng có thể dùng thêm một << và đặt ký tự \\n sau văn bản, như thế này: Mẹo: hai ký tự \\n liền nhau sẽ tạo một dòng trống: Một cách khác để chèn dòng mới là dùng endl: Cả \\n và endl đều ngắt dòng. Tuy nhiên \\n được dùng nhiều hơn. Ký tự xuống dòng (\\n) gọi là escape sequence, buộc con trỏ nhảy về đầu dòng tiếp theo trên màn hình. Kết quả là một dòng mới. Ví dụ các mã thoát hợp lệ khác:"
+      "content": "Để chèn dòng mới trong kết quả xuất, dùng ký tự \\n:\n\nBạn cũng có thể dùng thêm một << và đặt ký tự \\n sau văn bản, như thế này:\n\nMẹo: hai ký tự \\n liền nhau sẽ tạo một dòng trống:\n\nMột cách khác để chèn dòng mới là dùng endl:\n\nCả \\n và endl đều ngắt dòng. Tuy nhiên \\n được dùng nhiều hơn. Ký tự xuống dòng (\\n) gọi là escape sequence, buộc con trỏ nhảy về đầu dòng tiếp theo trên màn hình. Kết quả là một dòng mới. Ví dụ các mã thoát hợp lệ khác:"
     },
     "sections": [
       "Dòng mới",
@@ -668,7 +668,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Kiểm tra hiểu biết về xuất dữ liệu C++ bằng thử thách code nhỏ."
+      "content": "Kiểm tra hiểu biết của bạn về cách xuất dữ liệu trong C++ bằng thử thách code nhỏ. Đọc kỹ yêu cầu, sửa lại đoạn mã cho đến khi kết quả in ra đúng như mong đợi."
     },
     "sections": [
       "Thử thách: in tên và tuổi"
@@ -731,7 +731,7 @@
     ],
     "concept": {
       "title": "Khái niệm",
-      "content": "Comment có thể dùng để giải thích mã C++ và làm nó dễ đọc hơn. Nó cũng có thể dùng để ngăn thực thi khi thử nghiệm mã thay thế. Comment một dòng bắt đầu bằng hai dấu gạch chéo ( // ). Mọi văn bản giữa // và cuối dòng được trình biên dịch bỏ qua (không chạy). Ví dụ này dùng comment một dòng trước dòng mã: Ví dụ này dùng comment một dòng ở cuối dòng mã: Comment nhiều dòng bắt đầu bằng /* và kết thúc bằng */. Mọi văn bản giữa /* và */ sẽ được trình biên dịch bỏ qua: Tùy bạn chọn dùng kiểu nào. Thường ta dùng // cho comment ngắn, /* */ cho dài."
+      "content": "Comment có thể dùng để giải thích mã C++ và làm nó dễ đọc hơn. Nó cũng có thể dùng để ngăn thực thi khi thử nghiệm mã thay thế.\n\nComment một dòng bắt đầu bằng hai dấu gạch chéo ( // ). Mọi văn bản giữa // và cuối dòng được trình biên dịch bỏ qua (không chạy). Ví dụ này dùng comment một dòng trước dòng mã:\n\nVí dụ này dùng comment một dòng ở cuối dòng mã:\n\nComment nhiều dòng bắt đầu bằng /* và kết thúc bằng */. Mọi văn bản giữa /* và */ sẽ được trình biên dịch bỏ qua:\n\nTùy bạn chọn dùng kiểu nào. Thường ta dùng // cho comment ngắn, /* */ cho dài."
     },
     "sections": [
       "c. Nhận xét:",

@@ -25,7 +25,7 @@ class Handler(SimpleHTTPRequestHandler):
             if len(stdin) > 5000: raise ValueError('Input quá dài.')
             with tempfile.TemporaryDirectory(prefix='c-run-', dir=ROOT) as td:
                 src, exe = Path(td) / 'main.c', Path(td) / ('main.exe' if os.name == 'nt' else 'main')
-                src.write_text(code, encoding='utf-8')
+                src.write_bytes(code.encode("utf-8"))
                 comp = subprocess.run(['gcc', '-std=c11', '-Wall', '-Wextra', str(src), '-o', str(exe)], capture_output=True, text=True, timeout=8)
                 if comp.returncode != 0:
                     result = {'ok': False, 'phase': 'compile', 'output': comp.stderr[-6000:]}

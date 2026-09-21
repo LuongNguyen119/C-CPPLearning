@@ -34,7 +34,7 @@ class Handler(SimpleHTTPRequestHandler):
             with tempfile.TemporaryDirectory(prefix="cpp-run-", dir=ROOT) as td:
                 src = Path(td) / "main.cpp"
                 exe = Path(td) / ("main.exe" if os.name == "nt" else "main")
-                src.write_text(code, encoding="utf-8")
+                src.write_bytes(code.encode("utf-8"))
                 comp = subprocess.run(
                     [
                         "g++",

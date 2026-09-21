@@ -1,0 +1,460 @@
+127.0.0.1 - - [21/Sep/2026 11:39:55] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:40:02] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:43:50] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:43:57] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:44:20] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:44:29] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:44:39] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:49:37] code 404, message File not found
+127.0.0.1 - - [21/Sep/2026 11:49:37] "GET /health HTTP/1.1" 404 -
+127.0.0.1 - - [21/Sep/2026 11:49:57] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:50:53] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:51:06] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 11:51:30] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 14:22:31] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 14:22:34] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 14:22:34] "OPTIONS /run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 14:22:34] code 404, message Not Found
+127.0.0.1 - - [21/Sep/2026 14:22:34] "POST /run HTTP/1.1" 404 -
+127.0.0.1 - - [21/Sep/2026 14:23:13] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 14:23:15] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 14:39:55] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 14:39:57] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 14:41:46] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 14:41:47] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:20:13] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:20:14] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:20:14] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51176)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:20:23] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:20:25] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:20:25] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 58431)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:22:58] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:22:59] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:22:59] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 62117)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:28:45] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:28:47] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:31:28] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:31:29] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:31:33] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:35:42] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:35:44] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:35:44] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 51983)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:35:55] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:35:57] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:35:57] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 55100)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:36:39] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:36:40] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:36:40] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 62301)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:36:45] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:36:45] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:36:46] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:36:53] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:36:54] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:37:03] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:37:04] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:37:04] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 56130)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:37:19] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:37:20] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:37:20] "POST /api/run HTTP/1.1" 400 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 55689)
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 85, in do_POST
+    self.wfile.write(json.dumps(result, ensure_ascii=False).encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 484, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 89, in do_POST
+    self.end_headers()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\Desktop\C-CPP\CPP\cpp_server.py", line 13, in end_headers
+    super().end_headers()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 598, in end_headers
+    self.flush_headers()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 602, in flush_headers
+    self.wfile.write(b"".join(self._headers_buffer))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+----------------------------------------
+127.0.0.1 - - [21/Sep/2026 15:37:57] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:37:58] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:38:38] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:38:39] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:51:25] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:51:26] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:51:32] "OPTIONS /api/run HTTP/1.1" 204 -
+127.0.0.1 - - [21/Sep/2026 15:51:32] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 15:51:36] "POST /api/run HTTP/1.1" 200 -
+127.0.0.1 - - [21/Sep/2026 16:19:25] "POST /api/run HTTP/1.1" 200 -
