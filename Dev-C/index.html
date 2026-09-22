@@ -128,8 +128,8 @@
         background: var(--bg);
       }
       #output {
-        width: 360px;
-        min-width: 280px;
+        width: 400px;
+        min-width: 320px;
         background: var(--panel);
         border-left: 1px solid var(--border);
         display: flex;
@@ -137,21 +137,51 @@
         overflow: hidden;
       }
       .output-header {
-        padding: 6px 10px;
+        padding: 6px 12px;
         background: #1e1e1e;
         border-bottom: 1px solid var(--border);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         color: var(--muted);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+      .stdin-box {
+        width: 100%;
+        min-height: 96px;
+        resize: vertical;
+        background: #0f141a;
+        color: #e6edf3;
+        font-family: "Cascadia Code", "Fira Code", monospace;
+        font-size: 0.9rem;
+        line-height: 1.55;
+        padding: 10px 12px;
+        border: none;
+        border-bottom: 1px solid var(--border);
+        outline: none;
+        flex-shrink: 0;
+      }
+      .stdin-box:focus {
+        outline: 1px solid var(--accent);
+        outline-offset: -1px;
+        background: #0b1016;
+      }
+      .stdin-hint {
+        padding: 4px 12px 8px;
+        font-size: 0.72rem;
+        color: var(--muted);
+        background: #0f141a;
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+        letter-spacing: 0.2px;
       }
       .output-body {
         flex: 1;
         overflow: auto;
-        padding: 10px;
+        padding: 10px 12px;
         font-family: "Cascadia Code", "Fira Code", monospace;
         font-size: 0.85rem;
         line-height: 1.6;
@@ -173,7 +203,41 @@
       .output-line.info {
         color: var(--muted);
       }
-      .output-line.cmd {
+            .stdin-row {
+        margin: 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #161b22;
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--run);
+        border-radius: 5px;
+        padding: 6px 10px;
+      }
+      .stdin-row::before {
+        content: ">";
+        color: var(--run);
+        font-weight: 700;
+        font-family: "Cascadia Code", "Fira Code", monospace;
+        font-size: 1rem;
+      }
+      .stdin-row input {
+        flex: 1;
+        min-width: 0;
+        padding: 6px 8px;
+        background: #0d1117;
+        border: 1px solid #30363d;
+        border-radius: 4px;
+        color: var(--text);
+        font-family: "Cascadia Code", "Fira Code", monospace;
+        font-size: 0.9rem;
+        outline: none;
+      }
+      .stdin-row input:focus {
+        border-color: var(--run);
+        box-shadow: 0 0 0 2px rgba(78, 201, 176, 0.18);
+      }
+.output-line.cmd {
         color: #9cdcfe;
       }
       #statusbar {
@@ -320,6 +384,23 @@
     <main>
       <div id="editor"></div>
       <div id="output">
+        <div class="output-header">
+          <span>
+            <svg width="13" height="13" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:5px" fill="currentColor"><path d="M2 9.5A1.5 1.5 0 0 0 3.5 11h9A1.5 1.5 0 0 0 14 9.5V4a1.5 1.5 0 0 0-1.5-1.5h-9A1.5 1.5 0 0 0 2 4v5.5Zm5 .5a.5.5 0 0 1 0-1h2a.5.5 0 0 1 0 1H7Z"/></svg
+            >Nhập dữ liệu (stdin)
+          </span>
+          <span>cin / scanf</span>
+        </div>
+        <textarea
+          id="stdinBox"
+          class="stdin-box"
+          placeholder="Nhập dữ liệu tại đây…"
+          spellcheck="false"
+        ></textarea>
+        <div class="stdin-hint">
+          ⓘ Mỗi dòng = một lần <code>cin &gt;&gt;</code> / <code>scanf</code>. Bấm
+          <b>F9</b> để chạy — chương trình sẽ đọc lần lượt từng dòng.
+        </div>
         <div class="output-header">
           <span>Kết quả biên dịch & chạy</span><span id="lastRun">—</span>
         </div>
@@ -473,7 +554,7 @@
             payload = {
               compiler: WANDBOX_COMPILERS[lang],
               code: code,
-              stdin: "",
+              stdin: document.getElementById("stdinBox")?.value ?? "",
               options: "warning,gnu++20", // for C++
               compiler_options_raw:
                 lang === "cpp"
@@ -512,12 +593,13 @@
               setLastRun(true);
             }
           } else {
-            // Local server format
-            payload = { code, input: "" };
-            res = await fetch(api + "/run", {
+            // Local server: interactive session — compile once, stream stdout,
+            // and let the user type one line into the result panel whenever the
+            // program waits at a cin / scanf prompt.
+            res = await fetch(api + "/run/session", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload),
+              body: JSON.stringify({ code }),
             });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             data = await res.json();
@@ -530,17 +612,143 @@
               setLastRun(false);
               return;
             }
-            if (data.phase === "run") {
-              if (data.ok) {
-                appendOutput(
-                  data.output || "(chương trình chạy xong, không có output)",
-                  "ok",
-                );
-              } else {
-                appendOutput(data.output || "Lỗi runtime", "error");
-              }
-              setLastRun(data.ok);
+            if (!data.sessionId) {
+              appendOutput(data.output || "Không tạo được phiên chạy.", "error");
+              setLastRun(false);
+              return;
             }
+
+            const sid = data.sessionId;
+            let inputRow = null;
+            let inputCooldown = 0;
+            let inputCount = 0;
+            let promptList = [];
+
+            // Trích các cout/printf/puts NGAY TRƯỚC mỗi lần nhập (cin/scanf/fgets/...)
+            // tương ứng theo thứ tự, để mỗi dòng chờ nhập hiển thị prompt đứng trước nó.
+            // Lý do: khi stdout là pipe, CRT có thể đệm prompt chưa có endl/\\n.
+            const extractPrompts = (src) => {
+              const clean = src
+                .replace(/\/\/.*$/gm, "")
+                .replace(/\/\*[\s\S]*?\*\//g, "");
+              const inputRe = /\b(cin\s*>>|cin\.getline|getline\s*\(\s*cin|scanf\s*\(|fscanf\s*\(|gets\s*\(|fgets\s*\(|getchar\s*\(|getc\s*\(|getch\s*\()/g;
+              const inputs = [];
+              let im;
+              while ((im = inputRe.exec(clean))) inputs.push(im.index);
+              const outputs = [];
+              let m;
+              const coutRe = /cout\s*<<\s*"((?:\\.|[^"\\])*)"/g;
+              while ((m = coutRe.exec(clean))) outputs.push([m.index, m[1]]);
+              const printfRe = /printf\s*\(\s*"((?:\\.|[^"\\])*)"\s*[,)]/g;
+              while ((m = printfRe.exec(clean))) outputs.push([m.index, m[1]]);
+              const putsRe = /puts\s*\(\s*"((?:\\.|[^"\\])*)"\s*\)/g;
+              while ((m = putsRe.exec(clean))) outputs.push([m.index, m[1]]);
+              outputs.sort((a, b) => a[0] - b[0]);
+              const result = [];
+              let cursor = -1;
+              for (const idx of inputs) {
+                let best = null;
+                for (const [oi, txt] of outputs) {
+                  if (oi > cursor && oi < idx) best = txt;
+                }
+                result.push(best);
+                cursor = idx;
+              }
+              return result.filter((x) => x !== null);
+            };
+            promptList = extractPrompts(code);
+
+            const appendItem = (kind, text) => {
+              if (kind === "eof") return;
+              appendOutput(text.replace(/\n$/, ""), kind === "out" ? "ok" : "info");
+            };
+            const stdinBoxEl = document.getElementById("stdinBox");
+            const pretyped =
+              (stdinBoxEl?.value ?? "")
+                .split(/\r?\n/)
+                .map((s) => s.trimEnd())
+                .filter((s) => s.length > 0) || [];
+            let pretypedIdx = 0;
+
+            const sendLine = async (value) => {
+              inputCooldown = Date.now() + 400;
+              await fetch(api + "/run/session/" + sid + "/input", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: value }),
+              });
+              if (inputRow) {
+                inputRow.remove();
+                inputRow = null;
+              }
+            };
+            const showInput = () => {
+              if (inputRow) return;
+              // Gửi tự động dữ liệu đã soạn trong ô stdin (không ghi log phụ)
+              if (pretypedIdx < pretyped.length) {
+                sendLine(pretyped[pretypedIdx++]);
+                return;
+              }
+              // Hiển thị dòng in phía trước (prompt) giống console thật.
+              // Trong vòng lặp (for/while) cùng scanf chạy nhiều lần, nếu hết
+              // danh sách prompt thì tái dùng prompt gần nhất đã trích được.
+              const pr =
+                promptList[inputCount] ??
+                (promptList.length ? promptList[promptList.length - 1] : undefined);
+              if (pr) {
+                appendOutput(pr, "ok");
+              }
+              inputCount++;
+              inputRow = document.createElement("div");
+              inputRow.className = "output-line stdin-row";
+              const box = document.createElement("input");
+              box.type = "text";
+              box.autocomplete = "off";
+              box.placeholder = "Nhập dữ liệu (Enter để gửi, để trống = EOF)";
+              box.addEventListener("keydown", async (e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  await sendLine(box.value);
+                }
+              });
+              inputRow.appendChild(box);
+              outBody.appendChild(inputRow);
+              outBody.scrollTop = outBody.scrollHeight;
+              box.focus();
+            };
+
+            // Poll loop
+            for (let guard = 0; guard < 5000; guard++) {
+              await new Promise((r) => setTimeout(r, 120));
+              let st;
+              try {
+                st = await (
+                  await fetch(api + "/run/session/" + sid + "/poll", {
+                    method: "GET",
+                  })
+                ).json();
+              } catch (e) {
+                appendOutput("Mất kết nối phiên chạy.", "error");
+                setLastRun(false);
+                return;
+              }
+              if (st.items) {
+                st.items.forEach((it) => appendItem(it.type, it.text));
+              }
+              if (!st.alive) {
+                setLastRun(true);
+                return;
+              }
+              // Alive with no new output => the program is waiting at cin/scanf.
+              if (
+                (!st.items || st.items.length === 0) &&
+                Date.now() >= inputCooldown
+              ) {
+                showInput();
+              }
+            }
+            appendOutput("Chương trình chạy quá lâu, đã dừng phiên.", "warn");
+            setLastRun(false);
           }
         } catch (e) {
           appendOutput("Không kết nối được compiler.", "error");
