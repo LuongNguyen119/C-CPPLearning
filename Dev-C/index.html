@@ -670,8 +670,10 @@
                 .filter((s) => s.length > 0) || [];
             let pretypedIdx = 0;
 
-            const sendLine = async (value) => {
+            const sendLine = async (value, prompt) => {
               inputCooldown = Date.now() + 400;
+              // Echo dòng như console thật: "Ten: an" (prompt + giá trị)
+              appendOutput((prompt ? prompt + " " : "") + value, "ok");
               await fetch(api + "/run/session/" + sid + "/input", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -682,22 +684,21 @@
                 inputRow = null;
               }
             };
+            const curPrompt = () =>
+              promptList[inputCount] ??
+              (promptList.length ? promptList[promptList.length - 1] : undefined);
+
             const showInput = () => {
               if (inputRow) return;
-              // Gửi tự động dữ liệu đã soạn trong ô stdin (không ghi log phụ)
+              // Gửi tự động dữ liệu đã soạn trong ô stdin, echo "prompt giá trị"
               if (pretypedIdx < pretyped.length) {
-                sendLine(pretyped[pretypedIdx++]);
+                const v = pretyped[pretypedIdx++];
+                const pr = curPrompt();
+                inputCount++;
+                sendLine(v, pr);
                 return;
               }
-              // Hiển thị dòng in phía trước (prompt) giống console thật.
-              // Trong vòng lặp (for/while) cùng scanf chạy nhiều lần, nếu hết
-              // danh sách prompt thì tái dùng prompt gần nhất đã trích được.
-              const pr =
-                promptList[inputCount] ??
-                (promptList.length ? promptList[promptList.length - 1] : undefined);
-              if (pr) {
-                appendOutput(pr, "ok");
-              }
+              const pr = curPrompt();
               inputCount++;
               inputRow = document.createElement("div");
               inputRow.className = "output-line stdin-row";
@@ -708,7 +709,8 @@
               box.addEventListener("keydown", async (e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  await sendLine(box.value);
+                  const v = box.value;
+                  await sendLine(v, pr);
                 }
               });
               inputRow.appendChild(box);
