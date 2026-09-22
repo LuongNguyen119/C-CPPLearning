@@ -203,7 +203,7 @@
       .output-line.info {
         color: var(--muted);
       }
-            .stdin-row {
+      .stdin-row {
         margin: 6px 0;
         display: flex;
         align-items: center;
@@ -237,7 +237,7 @@
         border-color: var(--run);
         box-shadow: 0 0 0 2px rgba(78, 201, 176, 0.18);
       }
-.output-line.cmd {
+      .output-line.cmd {
         color: #9cdcfe;
       }
       #statusbar {
@@ -304,6 +304,104 @@
         border-top: 1px solid var(--border);
         background: #1e1e1e;
       }
+
+      /* Error Panel */
+      #editorWrap {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      #editor { flex: 1; min-width: 0; }
+      #problems {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        width: 360px;
+        max-width: 90%;
+        max-height: 45%;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        display: none;
+        flex-direction: column;
+        z-index: 50;
+        overflow: hidden;
+      }
+      #problems.visible { display: flex; }
+      #problems .problems-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 10px;
+        background: #1e1e1e;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.78rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+      #problems .problems-body { overflow: auto; flex: 1; padding: 4px 0; }
+      .problem-item {
+        padding: 5px 10px;
+        border-bottom: 1px solid rgba(60, 60, 60, 0.35);
+        cursor: pointer;
+        transition: background 0.12s;
+        font-family: "Cascadia Code", "Fira Code", monospace;
+        font-size: 0.78rem;
+      }
+      .problem-item:hover { background: #2d2d2d; }
+      .problem-item .p-head {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text);
+      }
+      .problem-item .p-pos { color: var(--muted); margin-left: auto; font-size: 0.7rem; }
+      .problem-item .p-msg { color: var(--text); padding-top: 2px; padding-left: 18px; white-space: pre-wrap; word-break: break-word; }
+      .problem-item.sev-error .p-ico { color: var(--err); }
+      .problem-item.sev-warning .p-ico { color: var(--warn); }
+      .problem-item.sev-note .p-ico { color: var(--accent); }
+      .problem-item .p-msg {
+        padding-left: 18px;
+        color: var(--text);
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.74rem;
+      }
+      .problem-item .p-context {
+        padding-left: 18px;
+        color: var(--muted);
+        white-space: pre;
+        font-size: 0.7rem;
+        margin-top: 2px;
+      }
+      .problems-empty {
+        padding: 12px;
+        text-align: center;
+        color: var(--ok);
+        font-size: 0.8rem;
+      }
+
+      /* Status badge area */
+      #diagBadge {
+        display: inline-flex;
+        gap: 4px;
+        align-items: center;
+      }
+      #badgeErrors, #badgeWarnings {
+        cursor: pointer;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        display: none;
+      }
+      #badgeErrors { background: rgba(244, 71, 71, 0.2); color: var(--err); }
+      #badgeWarnings { background: rgba(204, 167, 0, 0.22); color: var(--warn); }
+      #badgeErrors.show, #badgeWarnings.show { display: inline-block; }
+
       @media (max-width: 900px) {
         #output {
           width: 100%;
@@ -382,11 +480,33 @@
       </div>
     </header>
     <main>
-      <div id="editor"></div>
+      <div id="editorWrap">
+        <div id="editor"></div>
+        <div id="problems">
+          <div class="problems-head">
+            <span>Problems <span id="problemsCount"></span></span>
+            <span style="font-size: 0.7rem">
+              <a href="#" id="prevProblem" style="color: var(--text); text-decoration: none">← Prev</a>&nbsp;
+              <a href="#" id="nextProblem" style="color: var(--text); text-decoration: none">Next →</a>&nbsp;
+              <a href="#" id="clearProblems" style="color: var(--muted); text-decoration: none">✕</a>
+            </span>
+          </div>
+          <div class="problems-body" id="problemsBody"></div>
+        </div>
+      </div>
       <div id="output">
         <div class="output-header">
           <span>
-            <svg width="13" height="13" viewBox="0 0 16 16" style="vertical-align:-2px;margin-right:5px" fill="currentColor"><path d="M2 9.5A1.5 1.5 0 0 0 3.5 11h9A1.5 1.5 0 0 0 14 9.5V4a1.5 1.5 0 0 0-1.5-1.5h-9A1.5 1.5 0 0 0 2 4v5.5Zm5 .5a.5.5 0 0 1 0-1h2a.5.5 0 0 1 0 1H7Z"/></svg
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              style="vertical-align: -2px; margin-right: 5px"
+              fill="currentColor"
+            >
+              <path
+                d="M2 9.5A1.5 1.5 0 0 0 3.5 11h9A1.5 1.5 0 0 0 14 9.5V4a1.5 1.5 0 0 0-1.5-1.5h-9A1.5 1.5 0 0 0 2 4v5.5Zm5 .5a.5.5 0 0 1 0-1h2a.5.5 0 0 1 0 1H7Z"
+              /></svg
             >Nhập dữ liệu (stdin)
           </span>
           <span>cin / scanf</span>
@@ -398,8 +518,8 @@
           spellcheck="false"
         ></textarea>
         <div class="stdin-hint">
-          ⓘ Mỗi dòng = một lần <code>cin &gt;&gt;</code> / <code>scanf</code>. Bấm
-          <b>F9</b> để chạy — chương trình sẽ đọc lần lượt từng dòng.
+          ⓘ Mỗi dòng = một lần <code>cin &gt;&gt;</code> / <code>scanf</code>.
+          Bấm <b>F9</b> để chạy — chương trình sẽ đọc lần lượt từng dòng.
         </div>
         <div class="output-header">
           <span>Kết quả biên dịch & chạy</span><span id="lastRun">—</span>
@@ -425,6 +545,10 @@
           font-size: 0.7rem;
         "
       ></span>
+      <span id="diagBadge">
+        <span id="badgeErrors" title="Xem lỗi">❌ <span id="badgeErrorsCount">0</span></span>
+        <span id="badgeWarnings" title="Xem cảnh báo">⚠️ <span id="badgeWarningsCount">0</span></span>
+      </span>
       <span id="stModified" style="margin-left: 8px; color: #ffd700">●</span>
     </div>
     <div class="footer-hint">
@@ -533,8 +657,295 @@
         lastRunEl.style.color = ok ? "var(--ok)" : "var(--err)";
       }
 
+      /* ============================================================
+         DIAGNOSTIC SYSTEM — compiler output parser, error store,
+         editor markers & navigation (F8 / click-to-jump)
+         ============================================================ */
+
+      // ---- 1. Parser: normalize GCC/Clang output into Diagnostic[] ----
+      const DIAG_SEVERITIES = ["error", "warning", "note", "remark", "fatal error", "info"];
+      let diagnosticList = [];
+      let diagIndex = -1;
+
+      function parseCompilerOutput(rawOutput) {
+        if (!rawOutput || typeof rawOutput !== "string") return [];
+        const lines = rawOutput.split(/\r?\n/);
+        const result = [];
+        const baseName = currentFile || "main";
+
+        // Mẫu chuẩn:  path:line:col: severity: message  (path có thể chứa `:` — Windows)
+        // Dùng `[^\r\n]+?` lazy + backtrack để tìm `:digit:digit:` từ phải path
+        const mainRe = /^([^:\r\n]+):(\d+):(\d+):\s+(fatal error|error|warning|note|info|remark):\s*(.+)$/i;
+        // Windows path:  C:\...\main.c:5:5: error:
+        const winRe = /^([A-Za-z]:\\[^:]*?):(\d+):(\d+):\s+(fatal error|error|warning|note|info|remark):\s*(.+)$/i;
+        // Mẫu thiếu col:  path:line: severity: message
+        const noColRe = /^([^:\r\n]+):(\d+):\s+(fatal error|error|warning|note|info|remark):\s*(.+)$/i;
+        // Mẫu thiếu path:  error: message  /  warning: message
+        const noFileRe = /^(fatal error|error|warning|note|info|remark):\s*(.+)$/i;
+
+        for (let i = 0; i < lines.length; i++) {
+          let m = lines[i].match(winRe);
+          let diag = null;
+          let ctx = "";
+          if (m) {
+            diag = {
+              file: m[1], line: +m[2], column: +m[3],
+              severity: m[4].toLowerCase(), message: m[5], raw: lines[i]
+            };
+          } else {
+            m = lines[i].match(mainRe);
+            if (m) {
+              diag = {
+                file: m[1], line: +m[2], column: +m[3],
+                severity: m[4].toLowerCase(), message: m[5], raw: lines[i]
+              };
+            } else {
+              m = lines[i].match(noColRe);
+              if (m) {
+                diag = { file: m[1], line: +m[2], column: null,
+                  severity: m[3].toLowerCase(), message: m[4], raw: lines[i] };
+              } else {
+                m = lines[i].match(noFileRe);
+                if (m) {
+                  diag = { file: null, line: null, column: null,
+                    severity: m[1].toLowerCase(), message: m[2], raw: lines[i] };
+                }
+              }
+            }
+          }
+
+          if (!diag) continue;
+
+          // Thu thập sourceContext (dòng code + caret ^...) nếu có
+          if (i + 1 < lines.length && /^\s*[|]?\s*[\^~]/u.test(lines[i + 1])) {
+            ctx = lines[i + 1].trim();
+          }
+
+          // Capture multiline: message giữ nguyên raw; thêm 2 dòng tiếp theo nếu là inlining note
+          if (i + 1 < lines.length && /(inlining|instantiated|required from|expanded from)/i.test(lines[i + 1]) && !ctx) {
+            ctx = lines[i + 1].trim();
+          }
+
+          result.push({
+            id: result.length + 1,
+            severity: diag.severity,
+            message: diag.message,
+            file: diag.file,
+            line: diag.line,
+            column: diag.column,
+            sourceContext: ctx || undefined,
+            rawMessage: diag.raw,
+          });
+        }
+
+        // ---- Deduplicate (cùng file:line:col + message) ----
+        const uniq = [];
+        const seen = new Set();
+        for (const d of result) {
+          const key = `${d.file}|${d.line}|${d.column}|${d.message}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            uniq.push(d);
+          }
+        }
+
+        // ---- Resolve path mapping: temp path -> editor current file ----
+        for (const d of uniq) {
+          if (d.file) {
+            const norm = d.file.replace(/\\/g, "/");
+            // Compiler temp dir giống .../cpp-run-xxx/main.cpp → map về tên file đang mở
+            const tail = norm.split("/").pop();
+            if (/^(main|prog|source|temp)/.test(tail)) {
+              d.file = baseName;
+            } else {
+              // Giữ đường dẫn tương đối nếu có thư mục; normalize
+              d.file = norm;
+            }
+          }
+        }
+        return uniq;
+      }
+
+      // ---- 2. Error Store + update UI ----
+      function setEditorDiagnostics(diags) {
+        diagnosticList = diags || [];
+        diagIndex = -1;
+        updateProblemsPanel(diags);
+        applyEditorMarkers(diags);
+        updateDiagBadges(diags);
+      }
+
+      function clearDiagnostics() {
+        diagnosticList = [];
+        diagIndex = -1;
+        updateProblemsPanel([]);
+        applyEditorMarkers([]);
+        updateDiagBadges([]);
+      }
+
+      function updateProblemsPanel(diags) {
+        const body = document.getElementById("problemsBody");
+        const count = document.getElementById("problemsCount");
+        if (!body || !count) return;
+        count.textContent = diags.length ? String(diags.length) : "";
+        body.innerHTML = "";
+
+        if (!diags.length) {
+          body.innerHTML = '<div class="problems-empty">✓ Không có lỗi</div>';
+          return;
+        }
+
+        const order = { "fatal error": 0, error: 0, warning: 1, note: 2, info: 3, remark: 3 };
+        diags.slice().sort((a, b) => (order[a.severity] ?? 2) - (order[b.severity] ?? 2) || (a.line || 0) - (b.line || 0));
+
+        for (const d of diags) {
+          const el = document.createElement("div");
+          el.className = "problem-item sev-" + (d.severity === "fatal error" ? "error" : (d.severity || "note"));
+          el.dataset.file = d.file || "";
+          el.dataset.line = d.line ?? "";
+          el.dataset.col = d.column ?? "";
+
+          const ico = d.severity === "warning" ? "⚠️" : d.severity === "note" || d.severity === "info" ? "💡" : "❌";
+          const pos =
+            d.line != null
+              ? (d.file || "") + ":" + d.line + (d.column != null ? ":" + d.column : "")
+              : (d.file || "compile");
+
+          el.innerHTML =
+            '<div class="p-head"><span class="p-ico">' + ico + "</span><span class='p-pos'>" +
+            esc(pos) + "</span></div>" +
+            '<div class="p-msg">' + esc(d.message) + "</div>" +
+            (d.sourceContext ? '<div class="p-context">' + esc(d.sourceContext) + "</div>" : "");
+
+          el.addEventListener("click", () => {
+            navigateToDiagnostic(d);
+            closeProblemsPanel();
+          });
+          body.appendChild(el);
+        }
+      }
+
+      function updateDiagBadges(diags) {
+        const err = diags.filter((d) => d.severity === "error" || d.severity === "fatal error").length;
+        const war = diags.filter((d) => d.severity === "warning").length;
+        const bE = document.getElementById("badgeErrors");
+        const bW = document.getElementById("badgeWarnings");
+        if (!bE || !bW) return;
+        document.getElementById("badgeErrorsCount").textContent = err;
+        document.getElementById("badgeWarningsCount").textContent = war;
+        bE.classList.toggle("show", err > 0);
+        bW.classList.toggle("show", war > 0);
+      }
+
+      // ---- 3. Monaco markers: underline + gutter icon + tooltip ----
+      function applyEditorMarkers(diags) {
+        if (!window.monaco || !editor || !editor.getModel) return;
+        const model = editor.getModel();
+        const markers = [];
+        const MARKER_SEV = {
+          "fatal error": monaco.MarkerSeverity.Error,
+          error: monaco.MarkerSeverity.Error,
+          warning: monaco.MarkerSeverity.Warning,
+          note: monaco.MarkerSeverity.Info,
+          info: monaco.MarkerSeverity.Info,
+          remark: monaco.MarkerSeverity.Hint,
+        };
+        for (const d of diags) {
+          if (d.line == null) continue;
+          const lineNum = Math.max(1, Math.min(d.line, model.getLineCount()));
+          const col = d.column != null ? Math.max(1, d.column) : 1;
+          markers.push({
+            severity: MARKER_SEV[d.severity] ?? monaco.MarkerSeverity.Error,
+            message: d.message,
+            source: "compiler",
+            startLineNumber: lineNum,
+            startColumn: col,
+            endLineNumber: lineNum,
+            endColumn: (model.getLineMaxColumn(lineNum) || col + 1), // highlight phần còn lại dòng
+          });
+        }
+        monaco.editor.setModelMarkers(model, "compiler", markers);
+      }
+
+      void clearDiagnostics;
+
+      // ---- 4. Navigation ----
+      function navigateToDiagnostic(d) {
+        if (!editor || !editor.getModel) return;
+        if (d == null) return;
+        openProblemsPanel();
+        if (d.line == null) return; // không có dòng thì không nhảy
+
+        const line = Math.max(1, Math.min(d.line, editor.getModel().getLineCount()));
+        const col = d.column != null ? Math.max(1, d.column) : 1;
+
+        // Highlight tạm thời (gạch chân màu) bằng decorations
+        const decoId = editor.deltaDecorations([], [{
+          range: new monaco.Range(line, 1, line, editor.getModel().getLineMaxColumn(line)),
+          options: { isWholeLine: false, inlineClassName: "error-highlight" }
+        }]);
+        setTimeout(() => editor.deltaDecorations(decoId, []), 2500);
+
+        editor.setPosition({ lineNumber: line, column: col });
+        editor.revealLineInCenter(line);
+        editor.focus();
+      }
+
+      function goNextDiagnostic() {
+        if (!diagnosticList.length) return;
+        diagIndex++;
+        if (diagIndex >= diagnosticList.length) diagIndex = 0;
+        navigateToDiagnostic(diagnosticList[diagIndex]);
+      }
+
+      function goPrevDiagnostic() {
+        if (!diagnosticList.length) return;
+        diagIndex--;
+        if (diagIndex < 0) diagIndex = diagnosticList.length - 1;
+        navigateToDiagnostic(diagnosticList[diagIndex]);
+      }
+
+      // ---- 5. Error Panel UI ----
+      function openProblemsPanel() {
+        const p = document.getElementById("problems");
+        if (p) p.classList.add("visible");
+      }
+      function closeProblemsPanel() {
+        const p = document.getElementById("problems");
+        if (p) p.classList.remove("visible");
+      }
+      function toggleProblemsPanel() {
+        const p = document.getElementById("problems");
+        if (p) p.classList.toggle("visible");
+      }
+
+      // ---- 6. Wires ----
+      function setupDiagnosticUI() {
+        document.getElementById("prevProblem").addEventListener("click", (e) => { e.preventDefault(); goPrevDiagnostic(); });
+        document.getElementById("nextProblem").addEventListener("click", (e) => { e.preventDefault(); goNextDiagnostic(); });
+        document.getElementById("clearProblems").addEventListener("click", (e) => { e.preventDefault(); clearDiagnostics(); closeProblemsPanel(); });
+        document.getElementById("badgeErrors").addEventListener("click", () => toggleProblemsPanel());
+        document.getElementById("badgeWarnings").addEventListener("click", () => toggleProblemsPanel());
+      }
+
+      // ---- 7. Helper ----
+      function esc(v) {
+        return String(v ?? "").replace(/[&<>"']/g, (c) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+        })[c]);
+      }
+
+      // Style cho highlight inline
+      if (typeof document !== "undefined") {
+        const st = document.createElement("style");
+        st.textContent =
+          ".error-highlight { background: rgba(244,71,71,0.35); text-decoration: underline wavy #f44747; box-shadow: 0 0 0 1px rgba(244,71,71,0.25); border-radius: 2px; }";
+        document.head.appendChild(st);
+      }
+
       async function compileAndRun(code, lang) {
         clearOutput();
+        clearDiagnostics(); // lifecycle: xóa lỗi cũ khi chạy lại
         const compilerLabel =
           lang === "cpp" ? "g++ -std=c++20" : "gcc -std=c11";
         appendOutput(
@@ -577,6 +988,9 @@
             // Wandbox response format
             if (data.compiler_error && String(data.status) !== "0") {
               appendOutput(data.compiler_error, "error");
+              const diags = parseCompilerOutput(data.compiler_error);
+              setEditorDiagnostics(diags);
+              if (diags.length) openProblemsPanel();
               setLastRun(false);
               return;
             }
@@ -605,15 +1019,34 @@
             data = await res.json();
 
             if (data.phase === "compile" && !data.ok) {
-              appendOutput(
-                data.output || "Lỗi biên dịch không xác định",
-                "error",
-              );
+              const output = data.output || "Lỗi biên dịch không xác định";
+              appendOutput(output, "error");
+              // Hệ thống Diagnostic: parse compiler output + markers + panel
+              const diags = parseCompilerOutput(output);
+              setEditorDiagnostics(diags);
+              if (diags.length) openProblemsPanel();
+              if (!diags.length && /lỗi|error/i.test(output)) {
+                // Compiler có thể báo lỗi không có dòng (vd "compilation terminated")
+                const fallback = [{
+                  id: 1,
+                  severity: "error",
+                  message: output.trim(),
+                  file: currentFile || undefined,
+                  line: null,
+                  column: null,
+                  rawMessage: output.trim(),
+                }];
+                setEditorDiagnostics(fallback);
+                openProblemsPanel();
+              }
               setLastRun(false);
               return;
             }
             if (!data.sessionId) {
-              appendOutput(data.output || "Không tạo được phiên chạy.", "error");
+              appendOutput(
+                data.output || "Không tạo được phiên chạy.",
+                "error",
+              );
               setLastRun(false);
               return;
             }
@@ -631,7 +1064,8 @@
               const clean = src
                 .replace(/\/\/.*$/gm, "")
                 .replace(/\/\*[\s\S]*?\*\//g, "");
-              const inputRe = /\b(cin\s*>>|cin\.getline|getline\s*\(\s*cin|scanf\s*\(|fscanf\s*\(|gets\s*\(|fgets\s*\(|getchar\s*\(|getc\s*\(|getch\s*\()/g;
+              const inputRe =
+                /\b(cin\s*>>|cin\.getline|getline\s*\(\s*cin|scanf\s*\(|fscanf\s*\(|gets\s*\(|fgets\s*\(|getchar\s*\(|getc\s*\(|getch\s*\()/g;
               const inputs = [];
               let im;
               while ((im = inputRe.exec(clean))) inputs.push(im.index);
@@ -660,7 +1094,10 @@
 
             const appendItem = (kind, text) => {
               if (kind === "eof") return;
-              appendOutput(text.replace(/\n$/, ""), kind === "out" ? "ok" : "info");
+              appendOutput(
+                text.replace(/\n$/, ""),
+                kind === "out" ? "ok" : "info",
+              );
             };
             const stdinBoxEl = document.getElementById("stdinBox");
             const pretyped =
@@ -670,10 +1107,8 @@
                 .filter((s) => s.length > 0) || [];
             let pretypedIdx = 0;
 
-            const sendLine = async (value, prompt) => {
+            const sendLine = async (value) => {
               inputCooldown = Date.now() + 400;
-              // Echo dòng như console thật: "Ten: an" (prompt + giá trị)
-              appendOutput((prompt ? prompt + " " : "") + value, "ok");
               await fetch(api + "/run/session/" + sid + "/input", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -684,21 +1119,24 @@
                 inputRow = null;
               }
             };
-            const curPrompt = () =>
-              promptList[inputCount] ??
-              (promptList.length ? promptList[promptList.length - 1] : undefined);
-
             const showInput = () => {
               if (inputRow) return;
-              // Gửi tự động dữ liệu đã soạn trong ô stdin, echo "prompt giá trị"
+              // Gửi tự động dữ liệu đã soạn trong ô stdin (không ghi log phụ)
               if (pretypedIdx < pretyped.length) {
-                const v = pretyped[pretypedIdx++];
-                const pr = curPrompt();
-                inputCount++;
-                sendLine(v, pr);
+                sendLine(pretyped[pretypedIdx++]);
                 return;
               }
-              const pr = curPrompt();
+              // Hiển thị dòng in phía trước (prompt) giống console thật.
+              // Trong vòng lặp (for/while) cùng scanf chạy nhiều lần, nếu hết
+              // danh sách prompt thì tái dùng prompt gần nhất đã trích được.
+              const pr =
+                promptList[inputCount] ??
+                (promptList.length
+                  ? promptList[promptList.length - 1]
+                  : undefined);
+              if (pr) {
+                appendOutput(pr, "ok");
+              }
               inputCount++;
               inputRow = document.createElement("div");
               inputRow.className = "output-line stdin-row";
@@ -709,8 +1147,7 @@
               box.addEventListener("keydown", async (e) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  const v = box.value;
-                  await sendLine(v, pr);
+                  await sendLine(box.value);
                 }
               });
               inputRow.appendChild(box);
@@ -739,6 +1176,20 @@
               }
               if (!st.alive) {
                 setLastRun(true);
+                // Runtime error: nếu có thoát khác 0 + có keyword lỗi -> thêm vào Problems
+                const stale = (document.getElementById("outBody")?.innerText || "").split("\n").pop() || "";
+                if (/segmentation|core dumped|return.*[-]?\d+$|undefined|abort/i.test(stale)) {
+                  setEditorDiagnostics([{
+                    id: 1,
+                    severity: "error",
+                    message: "Runtime error: " + stale.trim(),
+                    file: currentFile || undefined,
+                    line: null,
+                    column: null,
+                    rawMessage: stale.trim(),
+                  }]);
+                  openProblemsPanel();
+                }
                 return;
               }
               // Alive with no new output => the program is waiting at cin/scanf.
@@ -864,27 +1315,25 @@
         setStatus(currentFile, currentLang, 1, 1, false);
       });
 
-      document
-        .getElementById("btnRun")
-        .addEventListener("click", async () => {
-          // Dev-C-style gate: a program must live in a real file on disk before
-          // it can be compiled & run. If the buffer has no disk handle yet, open
-          // the Save dialog; cancelling it aborts the run (no file is written).
-          if (!fileHandle) {
-            const saved = await saveAsFile();
-            if (!saved) {
-              appendOutput(
-                "Chưa lưu file ra ổ đĩa — không thể chạy. Hãy lưu file rồi bấm F9 lại.",
-                "warn",
-              );
-              return;
-            }
-          } else {
-            // Already backed by a disk file: always run the on-disk version.
-            await saveToDisk(fileHandle, editor.getValue());
+      document.getElementById("btnRun").addEventListener("click", async () => {
+        // Dev-C-style gate: a program must live in a real file on disk before
+        // it can be compiled & run. If the buffer has no disk handle yet, open
+        // the Save dialog; cancelling it aborts the run (no file is written).
+        if (!fileHandle) {
+          const saved = await saveAsFile();
+          if (!saved) {
+            appendOutput(
+              "Chưa lưu file ra ổ đĩa — không thể chạy. Hãy lưu file rồi bấm F9 lại.",
+              "warn",
+            );
+            return;
           }
-          compileAndRun(editor.getValue(), currentLang);
-        });
+        } else {
+          // Already backed by a disk file: always run the on-disk version.
+          await saveToDisk(fileHandle, editor.getValue());
+        }
+        compileAndRun(editor.getValue(), currentLang);
+      });
       document.getElementById("btnClear").addEventListener("click", () => {
         clearOutput();
         appendOutput("Đã xóa kết quả.", "info");
@@ -1183,7 +1632,20 @@
           const run = document.getElementById("btnRun");
           if (run) run.click();
         }
+        // Diagnostic navigation: F8 next, Shift+F8 previous
+        if (e.key === "F8" && !e.shiftKey) {
+          e.preventDefault();
+          goNextDiagnostic();
+        }
+        if (e.key === "F8" && e.shiftKey) {
+          e.preventDefault();
+          goPrevDiagnostic();
+        }
       });
+
+      // Wire diagnostic UI + init diagnostics
+      try { setupDiagnosticUI(); } catch (e) { console.warn("diag ui:", e); }
+      if (isLocalhost) updateCompilerBadge();
 
       // Load last session
       const lastSession = JSON.parse(
