@@ -221,7 +221,8 @@
         font-family: "Cascadia Code", "Fira Code", monospace;
         font-size: 1rem;
       }
-      .stdin-row input {
+      .stdin-row input,
+      .stdin-row textarea {
         flex: 1;
         min-width: 0;
         padding: 6px 8px;
@@ -232,8 +233,10 @@
         font-family: "Cascadia Code", "Fira Code", monospace;
         font-size: 0.9rem;
         outline: none;
+        resize: none;
       }
-      .stdin-row input:focus {
+      .stdin-row input:focus,
+      .stdin-row textarea:focus {
         border-color: var(--run);
         box-shadow: 0 0 0 2px rgba(78, 201, 176, 0.18);
       }
@@ -303,6 +306,55 @@
         text-align: center;
         border-top: 1px solid var(--border);
         background: #1e1e1e;
+      }
+
+      /* Terminal-style "Kết quả biên dịch & chạy" */
+      .term-status {
+        color: var(--warn);
+        font-style: italic;
+        margin: 4px 0;
+      }
+      .term-divider {
+        border-top: 1px dashed var(--border);
+        margin: 6px 0;
+        opacity: 0.6;
+      }
+      .term-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--muted);
+        margin: 8px 0 2px;
+      }
+      .term-input-line { color: var(--text); }
+      .term-output-line { color: var(--text); }
+      .term-build { color: var(--muted); }
+      .term-error { color: var(--err); }
+      .term-warn { color: var(--warn); }
+      .term-ok { color: var(--ok); }
+      .term-prompt-hint {
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-style: italic;
+        margin-left: 4px;
+      }
+      #btnStop {
+        display: none;
+        background: rgba(244, 71, 71, 0.15);
+        border: 1px solid rgba(244, 71, 71, 0.5);
+        color: var(--err);
+        padding: 1px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.72rem;
+        margin-left: 4px;
+      }
+      #btnStop.show { display: inline-block; }
+      #btnStop:hover { background: rgba(244, 71, 71, 0.35); }
+      .exec-session-label {
+        color: var(--muted);
+        font-size: 0.68rem;
+        margin-left: 6px;
       }
 
       /* Error Panel */
@@ -522,7 +574,12 @@
           Bấm <b>F9</b> để chạy — chương trình sẽ đọc lần lượt từng dòng.
         </div>
         <div class="output-header">
-          <span>Kết quả biên dịch & chạy</span><span id="lastRun">—</span>
+          <span>Kết quả biên dịch & chạy</span
+          ><span
+            ><button id="btnStop" title="Dừng chương trình (Ctrl+C)">■ Dừng</button
+            ><span id="lastRun">—</span
+            ><span class="exec-session-label" id="execSessionLabel"></span
+          ></span>
         </div>
         <div class="output-body" id="outBody">
           Chưa chạy chương trình nào.<br />Nhấn <b>F9</b> hoặc nút
@@ -1007,9 +1064,18 @@
               setLastRun(true);
             }
           } else {
-            // Local server: interactive session — compile once, stream stdout,
-            // and let the user type one line into the result panel whenever the
-            // program waits at a cin / scanf prompt.
+            // ============================================================
+            // Local server — TERMINAL ENGINE with stdout buffer.
+            //  - stdout/stderr được buffer (không render từng dòng khi chạy).
+            //  - Có thể gõ input trực tiếp trong panel "Kết quả biên dịch & chạy".
+            //  - Khi process kết thúc → render FINAL OUTPUT (policy loại prompt).
+            // ============================================================
+            let execNo = (window.__execCount = (window.__execCount || 0) + 1);
+            const execLabel = document.getElementById("execSessionLabel");
+            if (execLabel) execLabel.textContent = "Execution #" + execNo;
+            const stopBtn = document.getElementById("btnStop");
+            if (stopBtn) stopBtn.classList.add("show");
+
             res = await fetch(api + "/run/session", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -1021,19 +1087,18 @@
             if (data.phase === "compile" && !data.ok) {
               const output = data.output || "Lỗi biên dịch không xác định";
               appendOutput(output, "error");
+              if (stopBtn) stopBtn.classList.remove("show");
               // Hệ thống Diagnostic: parse compiler output + markers + panel
               const diags = parseCompilerOutput(output);
               setEditorDiagnostics(diags);
               if (diags.length) openProblemsPanel();
               if (!diags.length && /lỗi|error/i.test(output)) {
-                // Compiler có thể báo lỗi không có dòng (vd "compilation terminated")
                 const fallback = [{
                   id: 1,
                   severity: "error",
                   message: output.trim(),
                   file: currentFile || undefined,
-                  line: null,
-                  column: null,
+                  line: null, column: null,
                   rawMessage: output.trim(),
                 }];
                 setEditorDiagnostics(fallback);
@@ -1043,10 +1108,8 @@
               return;
             }
             if (!data.sessionId) {
-              appendOutput(
-                data.output || "Không tạo được phiên chạy.",
-                "error",
-              );
+              appendOutput(data.output || "Không tạo được phiên chạy.", "error");
+              if (stopBtn) stopBtn.classList.remove("show");
               setLastRun(false);
               return;
             }
@@ -1056,11 +1119,16 @@
             let inputCooldown = 0;
             let inputCount = 0;
             let promptList = [];
+            let blockList = [];      // block text (toàn bộ printf/cout/puts trước từng input)
+            let promptLoopStart = -1;
+            let outputBuffer = "";       // buffer stdout/stderr (không render ngay)
+            let inputLog = [];           // các dòng input người dùng đã nhập
+            const MAX_OUT = 3 * 1024 * 1024; // 3 MB buffer giới hạn
 
-            // Trích các cout/printf/puts NGAY TRƯỚC mỗi lần nhập (cin/scanf/fgets/...)
-            // tương ứng theo thứ tự, để mỗi dòng chờ nhập hiển thị prompt đứng trước nó.
-            // Lý do: khi stdout là pipe, CRT có thể đệm prompt chưa có endl/\\n.
-            const extractPrompts = (src) => {
+            // Trích các cout/printf/puts NGAY TRƯỚC mỗi lần nhập.
+            // Mỗi phần tử = {block, prompt}: block = chuỗi đầy đủ (nhiều printf)
+            // theo thứ tự xuất hiện giữa lần nhập trước và lần nhập này.
+            const extractBlocks = (src) => {
               const clean = src
                 .replace(/\/\/.*$/gm, "")
                 .replace(/\/\*[\s\S]*?\*\//g, "");
@@ -1078,27 +1146,82 @@
               const putsRe = /puts\s*\(\s*"((?:\\.|[^"\\])*)"\s*\)/g;
               while ((m = putsRe.exec(clean))) outputs.push([m.index, m[1]]);
               outputs.sort((a, b) => a[0] - b[0]);
-              const result = [];
+              const blocks = [];
               let cursor = -1;
               for (const idx of inputs) {
-                let best = null;
+                const parts = [];
                 for (const [oi, txt] of outputs) {
-                  if (oi > cursor && oi < idx) best = txt;
+                  if (oi > cursor && oi < idx) parts.push(txt);
                 }
-                result.push(best);
+                if (parts.length) {
+                  const block = parts.join("");
+                  const pm = block.match(/"([^"]*)"\s*[,)]?\s*$/);
+                  blocks.push({ block, prompt: parts[parts.length - 1] });
+                }
                 cursor = idx;
               }
-              return result.filter((x) => x !== null);
+              return blocks;
             };
-            promptList = extractPrompts(code);
+            blockList = extractBlocks(code);
+            promptList = blockList.map((b) => b.prompt);
 
-            const appendItem = (kind, text) => {
-              if (kind === "eof") return;
-              appendOutput(
-                text.replace(/\n$/, ""),
-                kind === "out" ? "ok" : "info",
-              );
+            // ---- Phát hiện vòng lặp: prompt nào nằm trong thân vòng lặp? ----
+            // Dùng để xoay đúng khi inputCount vượt danh sách: quay lại từ đầu
+            // prompt của thân vòng lặp (vd Nhap ho ten: -> Nhap diem: -> Nhap ho ten: ...)
+            promptLoopStart = (() => {
+              const clean = code
+                .replace(/\/\/.*$/gm, "")
+                .replace(/\/\*[\s\S]*?\*\//g, "");
+              if (!promptList.length) return -1;
+              // Thu thập mọi vị trí input trong code (giống extractPrompts)
+              const inpG =
+                /\b(cin\s*>>|cin\.getline|getline\s*\(\s*cin|scanf\s*\(|fscanf\s*\(|gets\s*\(|fgets\s*\(|getchar\s*\(|getc\s*\(|getch\s*\()/g;
+              const inputIdxs = [];
+              let im2;
+              while ((im2 = inpG.exec(clean))) inputIdxs.push(im2.index);
+              const loopRe = /\b(for|while|do)\s*\(/g;
+              const loopStarts = [];
+              let lm;
+              while ((lm = loopRe.exec(clean))) loopStarts.push(lm.index);
+              if (!loopStarts.length) return -1;
+              const loopStart = loopStarts[0];
+              if (loopStart < 0 || !inputIdxs.length) return -1;
+              // Input đầu tiên nằm SAU vòng lặp = prompt đầu tiên của thân vòng lặp
+              const afterLoop = inputIdxs.filter((idx) => idx >= loopStart);
+              if (!afterLoop.length) return -1;
+              const firstAfterLoop = afterLoop[0];
+              // Đếm số input trước nó -> chỉ số prompt bắt đầu vòng lặp
+              let cntBefore = 0;
+              for (const idx of inputIdxs) {
+                if (idx < firstAfterLoop) cntBefore++;
+              }
+              return cntBefore;
+            })();
+            if (promptLoopStart < 0) promptLoopStart = promptList.length ? 0 : -1;
+
+            // ---- Buffer stdout ----
+            const pushOutput = (text) => {
+              outputBuffer += text;
+              if (outputBuffer.length > MAX_OUT) {
+                outputBuffer = outputBuffer.slice(-Math.floor(MAX_OUT * 0.5));
+              }
             };
+
+            // ---- Status chờ nhập ----
+            let waitingShown = false;
+            const showWaiting = () => {
+              if (waitingShown && inputRow) return;
+              if (!inputRow) {
+                const d = document.createElement("div");
+                d.className =
+                  "output-line term-status" +
+                  (waitingShown ? "" : " waiting-line");
+                d.textContent = "⏳ Chương trình đang chờ dữ liệu nhập...";
+                waitingShown = true;
+                outBody.appendChild(d);
+              }
+            };
+
             const stdinBoxEl = document.getElementById("stdinBox");
             const pretyped =
               (stdinBoxEl?.value ?? "")
@@ -1109,46 +1232,118 @@
 
             const sendLine = async (value) => {
               inputCooldown = Date.now() + 400;
-              await fetch(api + "/run/session/" + sid + "/input", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: value }),
-              });
+              inputLog.push(value);
+              try {
+                await fetch(api + "/run/session/" + sid + "/input", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ text: value }),
+                });
+              } catch (e) { /* ignore */ }
               if (inputRow) {
                 inputRow.remove();
                 inputRow = null;
               }
+              // Xoá prompt-hint cũ (lần chờ kế tiếp sẽ hiện prompt mới nếu có)
+              const oldPh = outBody.querySelector('.term-prompt-hint[data-prompt-row="1"]');
+              if (oldPh) oldPh.remove();
             };
             const showInput = () => {
               if (inputRow) return;
-              // Gửi tự động dữ liệu đã soạn trong ô stdin (không ghi log phụ)
+              // Gửi tự động dữ liệu soạn trong ô stdin — mỗi lượt pretyped
+              // cũng được tính là 1 lần nhập (inputCount++ để prompt tương ứng
+              // khi sang lượt nhập tay)
               if (pretypedIdx < pretyped.length) {
+                inputCount++;
                 sendLine(pretyped[pretypedIdx++]);
                 return;
               }
-              // Hiển thị dòng in phía trước (prompt) giống console thật.
-              // Trong vòng lặp (for/while) cùng scanf chạy nhiều lần, nếu hết
-              // danh sách prompt thì tái dùng prompt gần nhất đã trích được.
-              const pr =
-                promptList[inputCount] ??
-                (promptList.length
-                  ? promptList[promptList.length - 1]
-                  : undefined);
-              if (pr) {
-                appendOutput(pr, "ok");
+              showWaiting();
+              // Hiển thị block (cout/printf) trước ô nhập — đầy đủ theo code.
+              // Khi inputCount vượt danh sách (vòng lặp), quay về đầu thân vòng lặp.
+              let blk;
+              const N = blockList.length;
+              if (N === 0) {
+                blk = undefined;
+              } else if (inputCount < N) {
+                blk = blockList[inputCount].block; // lần chờ thứ N trong danh sách
+              } else if (promptLoopStart >= 0 && N - promptLoopStart >= 1) {
+                const n = N - promptLoopStart;
+                const k = promptLoopStart + ((inputCount - promptLoopStart) % n);
+                blk = blockList[k].block;
+              } else if (N >= 2) {
+                const mod = N - 1;
+                blk = blockList[1 + ((inputCount - 1) % mod)].block;
+              } else {
+                blk = blockList[N - 1].block;
+              }
+              if (blk && !pretyped.length) {
+                // Chuyển \n thành xuống dòng thật + thay %d bằng số lần lặp
+                let shown = blk.replace(/\\n/g, "\n").replace(/\\r/g, "");
+                const dMatch = blk.match(/%[dlufs]/g);
+                if (dMatch && promptLoopStart >= 0 && inputCount >= promptLoopStart) {
+                  const loopIdx = Math.floor((inputCount - promptLoopStart) / Math.max(1, N - promptLoopStart)) + 1;
+                  shown = shown.replace(/%[dlufs]/g, String(loopIdx));
+                }
+                const ph = document.createElement("div");
+                ph.className = "output-line term-prompt-hint";
+                ph.textContent = shown.replace(/\n$/, "");
+                ph.dataset.promptRow = "1";
+                outBody.appendChild(ph);
               }
               inputCount++;
               inputRow = document.createElement("div");
               inputRow.className = "output-line stdin-row";
-              const box = document.createElement("input");
-              box.type = "text";
+              inputRow.setAttribute("data-input-row", "1");
+              const box = document.createElement("textarea");
+              box.rows = 1;
               box.autocomplete = "off";
-              box.placeholder = "Nhập dữ liệu (Enter để gửi, để trống = EOF)";
+              box.spellcheck = false;
+              box.placeholder = "Nhập dữ liệu (Enter để gửi · Shift+Enter xuống dòng · Ctrl+C dừng)";
               box.addEventListener("keydown", async (e) => {
+                // Ctrl+C / Ctrl+Break => dừng chương trình
+                if (e.ctrlKey && (e.key === "c" || e.key === "C" || e.code === "KeyC")) {
+                  e.preventDefault();
+                  await stopHandler();
+                  return;
+                }
+                // Shift+Enter: cho phép Math nhập nhiều dòng (paste trực tiếp)
+                if (e.key === "Enter" && e.shiftKey) {
+                  // cho textarea xử lý ngầm (thêm xuống dòng)
+                  return;
+                }
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  await sendLine(box.value);
+                  if (e.repeat) return; // 1 Enter = 1 input event
+                  const v = box.value.replace(/\n+$/, "");
+                  box.value = "";
+                  await sendLine(v);
                 }
+                // Arrow/Ctrl+A/Ctrl+V mặc định của textarea
+              });
+              // Multi-line paste: gửi từng dòng tuần tự, đúng 1 lần mỗi dòng
+              box.addEventListener("paste", (e) => {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData("text");
+                const lines = text
+                  .split(/\r?\n/)
+                  .map((s) => s.trimEnd())
+                  .filter((s) => s.length > 0 || s === "");
+                if (lines.length <= 1) {
+                  box.value += text.replace(/\r/g, "");
+                  return;
+                }
+                // Nhiều dòng: dấu ngoài → gửi lần lượt
+                box.blur();
+                (async () => {
+                  for (const ln of lines) {
+                    if (inputRow) await sendLine(ln);
+                    await new Promise((r) => setTimeout(r, 20));
+                  }
+                  // Nếu process vẫn chờ thêm input, hiện lại ô nhập
+                  inputRow = null;
+                  box.focus();
+                })();
               });
               inputRow.appendChild(box);
               outBody.appendChild(inputRow);
@@ -1156,8 +1351,114 @@
               box.focus();
             };
 
-            // Poll loop
-            for (let guard = 0; guard < 5000; guard++) {
+            // ---- FINAL OUTPUT POLICY: loại prompt đã xác định, giữ phần còn lại theo thứ tự ----
+            const applyFinalPolicy = (raw) => {
+              let out = raw;
+              if (promptList && promptList.length) {
+                const uniquePrompts = [...new Set(promptList)];
+                uniquePrompts.sort((a, b) => b.length - a.length); // dài trước
+                for (const p of uniquePrompts) {
+                  if (!p || p.length < 2) continue;
+                  // Selective: chỉ loại khi nó đứng ở đầu dòng/đầu output hoặc đi kèm prompt khác,
+                  // giữ nguyên mọi ký tự khác theo thứ tự.
+                  out = out.split(p).join("");
+                }
+                // dọn khoảng trắng/lỗi dính do bỏ prompt
+                out = out
+                  .split("\n")
+                  .map((l) => l.replace(/[ \t]+$/gm, ""))
+                  .join("\n")
+                  .replace(/\n{3,}/g, "\n\n")
+                  .replace(/^[ \t]*\n+/g, "");
+              }
+              return out;
+            };
+
+            // ---- Render cuối cùng ----
+            const renderFinal = (st) => {
+              // INPUT section
+              if (inputLog.length) {
+                const lab = document.createElement("div");
+                lab.className = "output-line term-label";
+                lab.textContent = "INPUT";
+                outBody.appendChild(lab);
+                for (const v of inputLog) {
+                  const d = document.createElement("div");
+                  d.className = "output-line term-input-line";
+                  d.textContent = "> " + v;
+                  outBody.appendChild(d);
+                }
+              }
+              // OUTPUT section
+              const lab2 = document.createElement("div");
+              lab2.className = "output-line term-label";
+              lab2.textContent = "OUTPUT";
+              outBody.appendChild(lab2);
+
+              const final = applyFinalPolicy(outputBuffer).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+              if (final.trim()) {
+                const d = document.createElement("div");
+                d.className = "output-line term-output-line";
+                d.textContent = final;
+                outBody.appendChild(d);
+              } else {
+                const d = document.createElement("div");
+                d.className = "output-line term-warn";
+                d.textContent = "(chương trình không in gì)";
+                outBody.appendChild(d);
+              }
+              // Runtime error / status
+              if (st && st.timeout) {
+                const d = document.createElement("div");
+                d.className = "output-line term-error";
+                d.textContent = "⏱ Chương trình chạy quá thời gian cho phép. Process đã bị dừng.";
+                outBody.appendChild(d);
+              } else if (st && st.truncated) {
+                const d = document.createElement("div");
+                d.className = "output-line term-warn";
+                d.textContent = "⚠ Output quá lớn. Đã giới hạn output để bảo vệ hệ thống.";
+                outBody.appendChild(d);
+              } else if (st && st.exitCode != null && st.exitCode !== 0 && /segmentation|core dumped|abort|signal/i.test(outputBuffer)) {
+                const d = document.createElement("div");
+                d.className = "output-line term-error";
+                d.textContent = "❌ Runtime Error (exit " + st.exitCode + ")";
+                outBody.appendChild(d);
+              }
+              const d2 = document.createElement("div");
+              d2.className = "output-line term-ok";
+              d2.textContent = "✓ Chương trình kết thúc.";
+              outBody.appendChild(d2);
+            };
+
+            // ---- Poll loop (buffer, không render trung gian) ----
+            let interrupted = false;
+            const stopHandler = async () => {
+              interrupted = true;
+              try {
+                await fetch(api + "/run/session/" + sid + "/stop", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                });
+              } catch (e) { /* ignore */ }
+            };
+            if (stopBtn) {
+              stopBtn.onclick = stopHandler;
+            }
+
+            // Global Ctrl+C (kể cả khi focus trong editor) → Stop chương trình
+            const ctrlcHandler = (e) => {
+              if (e.ctrlKey && (e.key === "c" || e.key === "C")) {
+                e.preventDefault();
+                stopHandler();
+              }
+            };
+            document.addEventListener("keydown", ctrlcHandler);
+
+            for (let guard = 0; guard < 6000; guard++) {
+              if (interrupted) {
+                // stream một vòng cuối để lấy phần đã buffer rồi dừng
+                interrupted = false;
+              }
               await new Promise((r) => setTimeout(r, 120));
               let st;
               try {
@@ -1167,41 +1468,90 @@
                   })
                 ).json();
               } catch (e) {
-                appendOutput("Mất kết nối phiên chạy.", "error");
-                setLastRun(false);
-                return;
+                // net lỗi tạm — thử vài lần
+                try {
+                  const r2 = await fetch(api + "/run/session/" + sid + "/poll", { method: "GET" });
+                  st = await r2.json();
+                } catch (e2) {
+                  renderFinal({ exitCode: null, timeout: false, truncated: false });
+                  appendOutput(
+                    "Mất kết nối phiên chạy — đã dừng hiển thị.",
+                    "error",
+                  );
+                  setLastRun(false);
+                  break;
+                }
               }
               if (st.items) {
-                st.items.forEach((it) => appendItem(it.type, it.text));
+                for (const it of st.items) {
+                  pushOutput(it.text);
+                }
               }
               if (!st.alive) {
-                setLastRun(true);
-                // Runtime error: nếu có thoát khác 0 + có keyword lỗi -> thêm vào Problems
-                const stale = (document.getElementById("outBody")?.innerText || "").split("\n").pop() || "";
-                if (/segmentation|core dumped|return.*[-]?\d+$|undefined|abort/i.test(stale)) {
+                // Drain thêm vài vòng: reader thread server có thể lag sau exit
+                for (let d = 0; d < 6; d++) {
+                  await new Promise((r) => setTimeout(r, 150));
+                  try {
+                    const sdrain = await (
+                      await fetch(api + "/run/session/" + sid + "/poll", {
+                        method: "GET",
+                      })
+                    ).json();
+                    if (sdrain.items) {
+                      let got = false;
+                      for (const it of sdrain.items) {
+                        got = true;
+                        pushOutput(it.text);
+                      }
+                      if (!sdrain.alive && !got) break;
+                      if (sdrain.alive) break;
+                      st = sdrain;
+                    } else {
+                      break;
+                    }
+                  } catch (e) {
+                    break;
+                  }
+                }
+                renderFinal(st);
+                setLastRun(!(st && (st.timeout || (st.exitCode != null && st.exitCode !== 0) || st.truncated)));
+                if (stopBtn) stopBtn.classList.remove("show");
+                document.removeEventListener("keydown", ctrlcHandler);
+                // Runtime error entry
+                if (st && st.exitCode != null && st.exitCode !== 0 && /segmentation|core dumped|abort|signal/i.test(outputBuffer)) {
                   setEditorDiagnostics([{
                     id: 1,
                     severity: "error",
-                    message: "Runtime error: " + stale.trim(),
+                    message: "Runtime error (exit " + st.exitCode + ")",
                     file: currentFile || undefined,
-                    line: null,
-                    column: null,
-                    rawMessage: stale.trim(),
+                    line: null, column: null,
+                    rawMessage: "runtime error",
                   }]);
                   openProblemsPanel();
                 }
                 return;
               }
-              // Alive with no new output => the program is waiting at cin/scanf.
+              // Alive: nếu không có output mới → đang chờ input
               if (
                 (!st.items || st.items.length === 0) &&
                 Date.now() >= inputCooldown
               ) {
                 showInput();
+              } else if (st.items && st.items.length) {
+                // có output → đang chạy, xoá trạng thái "chờ" để render đúng status
+                const wl = document.querySelector(".waiting-line");
+                if (wl) wl.remove();
+                waitingShown = false;
               }
             }
-            appendOutput("Chương trình chạy quá lâu, đã dừng phiên.", "warn");
+            // Hết guard (quá lâu)
+            try {
+              await fetch(api + "/run/session/" + sid + "/stop", { method: "POST" });
+            } catch (e) { /* ignore */ }
+            renderFinal({ exitCode: null, timeout: true, truncated: false });
             setLastRun(false);
+            if (stopBtn) stopBtn.classList.remove("show");
+            document.removeEventListener("keydown", ctrlcHandler);
           }
         } catch (e) {
           appendOutput("Không kết nối được compiler.", "error");
