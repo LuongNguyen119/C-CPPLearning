@@ -333,10 +333,14 @@
       .term-warn { color: var(--warn); }
       .term-ok { color: var(--ok); }
       .term-prompt-hint {
-        color: var(--muted);
-        font-size: 0.75rem;
-        font-style: italic;
-        margin-left: 4px;
+        color: var(--run);
+        font-weight: 600;
+        font-size: 0.82rem;
+        margin: 4px 0 2px;
+        padding-left: 4px;
+        border-left: 3px solid var(--run);
+        background: rgba(78, 201, 176, 0.08);
+        border-radius: 2px;
       }
       #btnStop {
         display: none;
@@ -1285,6 +1289,9 @@
                   const loopIdx = Math.floor((inputCount - promptLoopStart) / Math.max(1, N - promptLoopStart)) + 1;
                   shown = shown.replace(/%[dlufs]/g, String(loopIdx));
                 }
+                // Hiện block ĐẦY ĐỦ (kể cả heading "--- Sinh vien thu X ---")
+                // để người dùng biết đang nhập cho phần nào; heading bị loại
+                // khỏi OUTPUT cuối trong applyFinalPolicy.
                 const ph = document.createElement("div");
                 ph.className = "output-line term-prompt-hint";
                 ph.textContent = shown.replace(/\n$/, "");
@@ -1351,7 +1358,7 @@
               box.focus();
             };
 
-            // ---- FINAL OUTPUT POLICY: loại prompt đã xác định, giữ phần còn lại theo thứ tự ----
+            // ---- FINAL OUTPUT POLICY: loại prompt + heading trung gian, giữ kết quả ----
             const applyFinalPolicy = (raw) => {
               let out = raw;
               if (promptList && promptList.length) {
@@ -1359,18 +1366,21 @@
                 uniquePrompts.sort((a, b) => b.length - a.length); // dài trước
                 for (const p of uniquePrompts) {
                   if (!p || p.length < 2) continue;
-                  // Selective: chỉ loại khi nó đứng ở đầu dòng/đầu output hoặc đi kèm prompt khác,
-                  // giữ nguyên mọi ký tự khác theo thứ tự.
                   out = out.split(p).join("");
                 }
-                // dọn khoảng trắng/lỗi dính do bỏ prompt
-                out = out
-                  .split("\n")
-                  .map((l) => l.replace(/[ \t]+$/gm, ""))
-                  .join("\n")
-                  .replace(/\n{3,}/g, "\n\n")
-                  .replace(/^[ \t]*\n+/g, "");
               }
+              // Bỏ dòng heading trung gian dạng "--- ... ---" (vd --- Sinh vien thu 1 ---)
+              out = out
+                .split("\n")
+                .filter((ln) => !/^\s*-{2,}\s/.test(ln) && !/^\s*-{2,}$/.test(ln))
+                .join("\n");
+              // dọn khoảng trắng/lỗi dính do bỏ prompt
+              out = out
+                .split("\n")
+                .map((l) => l.replace(/[ \t]+$/gm, ""))
+                .join("\n")
+                .replace(/\n{3,}/g, "\n\n")
+                .replace(/^[ \t]*\n+/g, "");
               return out;
             };
 
